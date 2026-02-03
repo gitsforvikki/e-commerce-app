@@ -96,7 +96,8 @@ export async function register(
     if (!password) {
       throw new ValidationError("Password is required", "password");
     }
-
+    //connect to db
+    await connectDB();
     //check uuser already exists or not
     const user = await User.findOne({ email });
     if (user) {
