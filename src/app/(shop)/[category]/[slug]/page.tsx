@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { ProductItem } from "@/components/prodocts/ProductItem";
 import { getProductById } from "@/services/product.services";
 import { ProductType } from "@/type";
+import ProductDetails from "@/components/prodocts/ProductDetails";
 
 export async function generateMetadata({
   params,
@@ -28,7 +29,7 @@ export default async function ProductDetailPage({
   return (
     <>
       <Suspense fallback={<div>Loading product details...</div>}>
-        <ProductItem product={product} />
+        <ProductDetails product={product} />
       </Suspense>
     </>
   );
