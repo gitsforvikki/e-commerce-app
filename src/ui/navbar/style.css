@@ -1,0 +1,9 @@
+@reference "tailwindcss";
+
+.navbar-links {
+  @apply hover:text-indigo-500 transition-colors font-medium;
+}
+
+.navbar-links-mobile {
+  @apply block px-4 py-2  hover:bg-indigo-500 rounded-lg transition-colors;
+}
