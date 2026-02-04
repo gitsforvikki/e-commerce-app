@@ -14,8 +14,8 @@ export const LoginForm = () => {
   const [state, formAction] = useActionState(login, initialState);
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="flex items-center justify-center min-h-[calc(100vh-64px)] px-4 py-8">
+    <div className="min-h-screen">
+      <div className="flex items-center justify-center bg-white shadow-2xl rounded-2xl px-4 md:px-6 lg:px-10 py-8">
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">

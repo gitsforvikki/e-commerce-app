@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="bg-gray-100">
+    <div className="pt-12 lg:pt-20 xl:pt-24 flex justify-center min-h-screen bg-blue-50">
       <LoginForm />
     </div>
   );
