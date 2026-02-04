@@ -70,7 +70,7 @@ export const Navbar = () => {
               </Link>
               <Link
                 href="/register"
-                className="px-4 py-2 bg-indigo-500 text-primary-foreground rounded-lg hover:bg-indigo-600 transition-colors font-medium"
+                className="px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-colors font-medium"
               >
                 Register
               </Link>
@@ -119,7 +119,7 @@ export const Navbar = () => {
               </Link>
               <Link
                 href="/register"
-                className="navbar-links-mobile bg-indigo-500 text-white hover:bg-indigo-600 transition-colors"
+                className="navbar-links-mobile bg-violet-500 text-white hover:bg-violet-600 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Register
