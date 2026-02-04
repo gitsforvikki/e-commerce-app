@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema(
       enum: ["KIDS", "MEN", "WOMEN"],
       required: [true, "Category is required"],
     },
-    stock: { type: Boolean, required: [true, "Stock is required"] },
+    stock: { type: Number, required: [true, "Stock is required"] },
     usage: { type: String, required: [true, "Usage is required"] },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },

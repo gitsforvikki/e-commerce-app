@@ -5,7 +5,7 @@ export interface ProductType {
   brand: string;
   price: number;
   qty: number;
-  stock: boolean;
+  stock: number;
   image: string;
   category: "KIDS" | "MEN" | "WOMEN" | "UNISEX";
   description: string;

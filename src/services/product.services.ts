@@ -57,3 +57,27 @@ export async function getProductsByCategory(
     throw new Error("Failed to fetch products by category");
   }
 }
+
+//upload product
+export async function uploadProduct(productData: Partial<ProductType>) {
+  try {
+    //connect to db
+    await connectDB();
+    //create new product
+    const newProduct = new Product(productData);
+    await newProduct.save();
+    return {
+      success: true,
+      product: {
+        ...newProduct.toObject(),
+        _id: newProduct._id.toString(),
+      },
+    };
+  } catch (error: any) {
+    console.error("Error uploading product:", error);
+    return {
+      success: false,
+      error: "Failed to upload product",
+    };
+  }
+}
