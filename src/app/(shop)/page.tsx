@@ -1,3 +1,4 @@
+import { ProductCard } from "@/components/prodocts/ProductCard";
 import { ProductItem } from "@/components/prodocts/ProductItem";
 import { getAllProducts } from "@/services/product.services";
 import { ProductType } from "@/type";
@@ -16,7 +17,7 @@ export default async function HomePage() {
         <h1 className="text-3xl font-bold underline">Welcome to the Shop!</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
           {products.map((product) => (
-            <ProductItem key={product._id} product={product} />
+            <ProductCard key={product._id} {...product} />
           ))}
         </div>
       </div>
