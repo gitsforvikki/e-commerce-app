@@ -1,5 +1,4 @@
 import { ProductCard } from "@/components/prodocts/ProductCard";
-import { ProductItem } from "@/components/prodocts/ProductItem";
 import { getAllProducts } from "@/services/product.services";
 import { ProductType } from "@/type";
 import { Category } from "@/ui/Category";

@@ -51,7 +51,11 @@ export async function login(
       throw new AuthError("Invalid credentials");
     }
     //create token
-    const token = signToken({ userId: user._id, role: user.role });
+    const token = signToken({
+      userId: user._id,
+      role: user.role,
+      name: user.firstName,
+    });
     // return token in cookie
     (await cookies()).set("token", token, {
       httpOnly: true,
@@ -59,6 +63,9 @@ export async function login(
       sameSite: "lax",
       path: "/",
     });
+    return {
+      success: true,
+    };
   } catch (error: any) {
     console.error("Error during login:", error);
     return {
@@ -66,7 +73,6 @@ export async function login(
       error: "Failed to login",
     };
   }
-  redirect("/");
 }
 
 //register action can be added similarly

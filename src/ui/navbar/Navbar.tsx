@@ -1,11 +1,29 @@
 "use client";
-import { ShoppingCart, Search, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { ShoppingCart, Search, Menu, X } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 import "./style.css";
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, loading, refreshUser } = useAuth();
+
+  //handle logout
+  const handleLogout = () => {
+    try {
+      fetch("/api/logout", {
+        method: "POST",
+      }).then((res) => {
+        if (res.ok) {
+          refreshUser();
+        }
+      });
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+  if (loading) return null;
 
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
@@ -61,20 +79,32 @@ export const Navbar = () => {
             </button>
 
             {/* Auth buttons - Desktop */}
-            <div className="hidden sm:flex items-center gap-2">
-              <Link
-                href="/login"
-                className="px-4 py-2 text-foreground hover:text-primary transition-colors font-medium"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/register"
-                className="px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-colors font-medium"
-              >
-                Register
-              </Link>
-            </div>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <span className="text-foreground">Hello </span>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-colors font-medium"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="hidden sm:flex items-center gap-2">
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-foreground hover:text-primary transition-colors font-medium"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-colors font-medium"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
 
             {/* Mobile menu button */}
             <button

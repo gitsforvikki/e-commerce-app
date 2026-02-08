@@ -10,6 +10,6 @@ export interface ProductType {
   description: string;
   usage: string;
 
-  createdAt: string; // ISO string
-  updatedAt: string; // ISO string
+  createdAt: string;
+  updatedAt: string;
 }

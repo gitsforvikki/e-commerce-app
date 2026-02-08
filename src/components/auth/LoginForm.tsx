@@ -1,18 +1,25 @@
 "use client";
-
-import { useActionState } from "react";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { login } from "@/server-actions/auth.actions";
+import { useAuth } from "@/context/auth-context";
 
 const initialState = { success: false };
 
 export const LoginForm = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [state, formAction] = useActionState(login, initialState);
-
+  const [state, formAction, pending] = useActionState(login, initialState);
+  const { refreshUser } = useAuth();
+  useEffect(() => {
+    if (state.success) {
+      refreshUser();
+      router.push("/");
+    }
+  }, [state.success]);
+  console.log(state);
   return (
     <div className="min-h-screen">
       <div className="flex items-center justify-center bg-white shadow-2xl rounded-2xl px-4 md:px-6 lg:px-10 py-8">
@@ -94,10 +101,10 @@ export const LoginForm = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={pending}
               className="w-full bg-violet-500 text-white py-3 rounded-lg font-semibold hover:bg-violet-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {loading ? (
+              {pending ? (
                 <>
                   <div className="text-white w-4 h-4 border-2 border-slate-300 border-t-transparent rounded-full animate-spin" />
                   Signing in...

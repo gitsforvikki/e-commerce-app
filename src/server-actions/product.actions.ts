@@ -1,5 +1,6 @@
 "use server";
 
+import { getLoggedInUser } from "@/lib/auth";
 import { uploadProduct } from "@/services/product.services";
 import { productSchemaValidator } from "@/validators/productSchemaValidator";
 import { revalidatePath } from "next/cache";
@@ -21,11 +22,16 @@ export type ProductFormState = {
   error?: string;
 };
 
+//Add product
 export async function addProduct(
   prevState: ProductFormState,
   formData: FormData,
 ) {
   try {
+    const user = await getLoggedInUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
     //collect form data and create product object
     const rawProduct = {
       name: formData.get("name") as string,
