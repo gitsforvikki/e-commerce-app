@@ -136,8 +136,8 @@ export const Navbar = () => {
             <Link href="#about" className="navbar-links-mobile">
               About
             </Link>
-            <Link href="#contact" className="navbar-links-mobile">
-              Contact
+            <Link href="/cart" className="navbar-links-mobile">
+              Cart
             </Link>
             <div className="border-t border-border pt-3 space-y-2">
               <Link

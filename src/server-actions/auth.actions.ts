@@ -8,6 +8,7 @@ import { connectDB } from "@/lib/db";
 import { AuthError, ValidationError } from "@/lib/error";
 import { User } from "@/models/User";
 import { registerUserValidator } from "@/validators/registerUserValidator";
+import { mergeGuestCart } from "@/services/cart/merge-cart.service";
 
 type AuthState = {
   success: boolean;
@@ -63,6 +64,9 @@ export async function login(
       sameSite: "lax",
       path: "/",
     });
+    if (token) {
+      mergeGuestCart(user._id);
+    }
     return {
       success: true,
     };

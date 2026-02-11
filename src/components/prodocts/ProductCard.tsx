@@ -1,12 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import Link from "next/link";
 import { ProductType } from "@/type";
 import { Heart, ShoppingCart, Star } from "lucide-react";
-import Link from "next/link";
+import { addToCartAction } from "@/server-actions/cart.action";
 
 export const ProductCard = ({ _id, image, name, price }: ProductType) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  function handleClick() {
+    startTransition(() => {
+      addToCartAction(_id);
+    });
+  }
   //   const discount = originalPrice
   //     ? Math.round(((originalPrice - price) / originalPrice) * 100)
   //     : 0;
@@ -52,13 +60,11 @@ export const ProductCard = ({ _id, image, name, price }: ProductType) => {
         {/* Add to cart on hover - Mobile friendly overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-end p-4 opacity-0 group-hover:opacity-100">
           <button
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-            className="w-full bg-violet-600 text-white py-2 rounded-lg font-medium hover:bg-violet-700 transition-colors flex items-center justify-center gap-2"
+            onClick={handleClick}
+            className="cursor-pointer w-full bg-violet-600 text-white py-2 rounded-lg font-medium hover:bg-violet-700 transition-colors flex items-center justify-center gap-2"
           >
             <ShoppingCart size={18} />
-            Add to Cart
+            {isPending ? "Adding.." : "Add to Cart"}
           </button>
         </div>
       </div>
