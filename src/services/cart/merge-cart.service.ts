@@ -22,7 +22,6 @@ export async function mergeGuestCart(userId: string) {
       });
     }
   }
-
-  await dbCart.save();
   await clearGuestCart();
+  await dbCart.save();
 }

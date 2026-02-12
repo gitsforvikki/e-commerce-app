@@ -2,7 +2,14 @@ import { Product } from "@/models/Product";
 import { getGuestCart } from "./guest-cart.services";
 import { getOrCreateCart } from "./user-cart.service";
 
-export async function getCartItems(userId?: string) {
+export const totalTax = (total: number) => {
+  return total / 10;
+};
+
+const grandTotal = (total: number) => {
+  return totalTax(total) + total;
+};
+export async function getCartItemsFromDB(userId?: string) {
   let items: { productId: string; qty: number }[] = [];
 
   if (userId) {
@@ -28,7 +35,10 @@ export async function getCartItems(userId?: string) {
     const product = products.find((p) => p._id.toString() === item.productId);
 
     return {
-      ...product,
+      _id: product._id.toString(),
+      name: product.name,
+      image: product.image,
+      price: product.price,
       qty: item.qty,
       total: product.price * item.qty,
     };

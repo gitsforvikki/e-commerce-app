@@ -68,15 +68,17 @@ export const Navbar = () => {
             </button>
 
             {/* Cart */}
-            <button className="relative p-2 hover:bg-muted rounded-lg transition-colors group">
-              <ShoppingCart
-                size={20}
-                className="text-foreground group-hover:text-primary transition-colors"
-              />
-              <span className="absolute top-1 right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center">
-                0
-              </span>
-            </button>
+            <Link href="/cart">
+              <button className="relative p-2 hover:bg-muted rounded-lg transition-colors group">
+                <ShoppingCart
+                  size={20}
+                  className="text-foreground group-hover:text-primary transition-colors"
+                />
+                <span className="absolute top-1 right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center">
+                  0
+                </span>
+              </button>
+            </Link>
 
             {/* Auth buttons - Desktop */}
             {user ? (

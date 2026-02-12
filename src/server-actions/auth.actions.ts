@@ -65,7 +65,7 @@ export async function login(
       path: "/",
     });
     if (token) {
-      mergeGuestCart(user._id);
+      await mergeGuestCart(user._id);
     }
     return {
       success: true,
