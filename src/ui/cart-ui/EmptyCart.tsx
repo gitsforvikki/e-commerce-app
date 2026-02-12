@@ -5,7 +5,7 @@ export const EmptyCart = () => {
     <div className="text-center py-16">
       <div className="mb-6">
         <svg
-          className="w-24 h-24 mx-auto text-muted-foreground/30"
+          className="w-24 h-24 mx-auto text-gray-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -26,7 +26,7 @@ export const EmptyCart = () => {
       </p>
       <Link
         href="/"
-        className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+        className="inline-block px-6 py-3 bg-violet-600 text-white rounded-lg font-medium hover:bg-violet-700 transition-colors"
       >
         Continue Shopping
       </Link>

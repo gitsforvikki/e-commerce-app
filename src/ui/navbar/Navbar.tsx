@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ShoppingCart, Search, Menu, X } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import "./style.css";
+import { routes } from "@/utils/routes";
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -30,8 +31,8 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-gradient-href-br from-primary href-accent rounded-lg flex items-center justify-center">
+          <Link href={routes.HOME} className="flex items-center gap-2 group">
+            <div className="w-8 h-8 bg-violet-600 text-white font-bold rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">S</span>
             </div>
             <span className="text-xl font-bold text-foreground hidden sm:inline group-hover:text-primary transition-colors">
@@ -41,16 +42,16 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/" className="navbar-links">
+            <Link href={routes.HOME} className="navbar-links">
               Home
             </Link>
-            <Link href="#products" className="navbar-links">
+            <Link href={routes.PRODUCTS} className="navbar-links">
               Products
             </Link>
-            <Link href="#about" className="navbar-links">
+            <Link href={routes.ABOUT} className="navbar-links">
               About
             </Link>
-            <Link href="#contact" className="navbar-links">
+            <Link href={routes.CONTACT} className="navbar-links">
               Contact
             </Link>
           </div>
@@ -68,13 +69,13 @@ export const Navbar = () => {
             </button>
 
             {/* Cart */}
-            <Link href="/cart">
+            <Link href={routes.CART}>
               <button className="relative p-2 hover:bg-muted rounded-lg transition-colors group">
                 <ShoppingCart
-                  size={20}
+                  size={25}
                   className="text-foreground group-hover:text-primary transition-colors"
                 />
-                <span className="absolute top-1 right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center">
+                <span className="absolute top-1 right-1 w-5 h-5 bg-violet-600 text-white text-xs rounded-full flex items-center justify-center">
                   0
                 </span>
               </button>
@@ -94,13 +95,13 @@ export const Navbar = () => {
             ) : (
               <div className="hidden sm:flex items-center gap-2">
                 <Link
-                  href="/login"
+                  href={routes.LOGIN}
                   className="px-4 py-2 text-foreground hover:text-primary transition-colors font-medium"
                 >
                   Sign In
                 </Link>
                 <Link
-                  href="/register"
+                  href={routes.REGISTER}
                   className="px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-colors font-medium"
                 >
                   Register
@@ -126,31 +127,31 @@ export const Navbar = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-border py-4 space-y-3">
             <Link
-              href="/"
+              href={routes.HOME}
               className="navbar-links-mobile"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Home
             </Link>
-            <Link href="#products" className="navbar-links-mobile">
+            <Link href={routes.PRODUCTS} className="navbar-links-mobile">
               Products
             </Link>
-            <Link href="#about" className="navbar-links-mobile">
+            <Link href={routes.ABOUT} className="navbar-links-mobile">
               About
             </Link>
-            <Link href="/cart" className="navbar-links-mobile">
+            <Link href={routes.CART} className="navbar-links-mobile">
               Cart
             </Link>
             <div className="border-t border-border pt-3 space-y-2">
               <Link
-                href="/login"
+                href={routes.LOGIN}
                 className="navbar-links-mobile"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Sign In
               </Link>
               <Link
-                href="/register"
+                href={routes.REGISTER}
                 className="navbar-links-mobile bg-violet-500 text-white hover:bg-violet-600 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

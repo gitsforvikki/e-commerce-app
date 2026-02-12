@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/auth-context";
 import "./globals.css";
 import { getLoggedInUser } from "@/lib/auth";
 import { getCartItemsFromDB } from "@/services/cart/get-cart-fromdb.service";
+import { Footer } from "@/ui/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default async function RootLayout({
         <AuthProvider>
           <Navbar />
           {children}
+          <Footer />
         </AuthProvider>
       </body>
     </html>
