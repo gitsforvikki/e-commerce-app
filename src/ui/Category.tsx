@@ -1,18 +1,29 @@
 "use client";
 
+import { ProductsList } from "@/components/prodocts/ProductsList";
+import { ProductType } from "@/type";
 import { useState } from "react";
 
 const categories = [
-  { name: "Electronics", icon: "📱" },
-  { name: "Fashion", icon: "👕" },
-  { name: "Home", icon: "🏠" },
+  { name: "MEN", icon: "👨" },
+  { name: "WOMEN", icon: "👩" },
+  { name: "KIDS", icon: "👶" },
+  { name: "ELECTRONICS", icon: "📱" },
+  { name: "FASSION", icon: "👕" },
+  { name: "HOME", icon: "🏠" },
   { name: "Sports", icon: "⚽" },
   { name: "Books", icon: "📚" },
   { name: "Beauty", icon: "💄" },
 ];
 
-export const Category = () => {
+export const Category = ({ productList }: { productList: ProductType[] }) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const filteredProduct = productList.filter(
+    (p) => p.category === selectedCategory,
+  );
+  const finalProductsToShow =
+    filteredProduct.length > 0 ? filteredProduct : productList;
+
   return (
     <>
       {/* Categories Section */}
@@ -42,6 +53,7 @@ export const Category = () => {
             </button>
           ))}
         </div>
+        <ProductsList products={finalProductsToShow} />
       </section>
     </>
   );

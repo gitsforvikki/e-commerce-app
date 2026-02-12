@@ -44,7 +44,7 @@ export async function addProduct(
       stock: Number(formData.get("stock")),
       usage: formData.get("usage") as string,
     };
-
+    console.log("Raw product" + rawProduct);
     //validate form data
     const validatedProduct = productSchemaValidator.safeParse(rawProduct);
     if (!validatedProduct.success) {
@@ -57,6 +57,7 @@ export async function addProduct(
     const product = validatedProduct.data;
     //db action to upload product
     const uploadResult = await uploadProduct(product);
+    console.log("upload Result" + uploadResult);
 
     if (!uploadResult.success) {
       return {

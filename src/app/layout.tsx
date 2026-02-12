@@ -27,9 +27,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getLoggedInUser();
+  // const user = await getLoggedInUser();
 
-  const cartItems = await getCartItemsFromDB(user?.userId);
+  // const cartItems = await getCartItemsFromDB(user?.userId);
 
   return (
     <html lang="en">

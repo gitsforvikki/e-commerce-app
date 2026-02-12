@@ -2,6 +2,7 @@ import { ProductCard } from "@/components/prodocts/ProductCard";
 import { getAllProducts } from "@/services/product.services";
 import { ProductType } from "@/type";
 import { Category } from "@/ui/Category";
+import { Features } from "@/ui/Features";
 import { HeroPage } from "@/ui/hero-section/Hero";
 import { Offer } from "@/ui/Offer";
 
@@ -10,16 +11,9 @@ export default async function HomePage() {
   return (
     <>
       <HeroPage />
-      <Category />
+      <Category productList={products} />
+      <Features />
       <Offer />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold underline">Welcome to the Shop!</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-          {products.map((product) => (
-            <ProductCard key={product._id} {...product} />
-          ))}
-        </div>
-      </div>
     </>
   );
 }
