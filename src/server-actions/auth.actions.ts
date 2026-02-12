@@ -3,12 +3,15 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
-import { signToken } from "@/lib/auth";
+import { getLoggedInUser, signToken } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { AuthError, ValidationError } from "@/lib/error";
 import { User } from "@/models/User";
 import { registerUserValidator } from "@/validators/registerUserValidator";
 import { mergeGuestCart } from "@/services/cart/merge-cart.service";
+import { profileFormValidator } from "@/validators/profileValidator";
+import { Types } from "mongoose";
+import { revalidatePath } from "next/cache";
 
 type AuthState = {
   success: boolean;
@@ -21,6 +24,21 @@ type AuthState = {
   error?: string;
 };
 
+type ProfileState = {
+  success: boolean;
+  updatedAt?: number;
+  formErrors?: {
+    firstName?: string[];
+    lastName?: string[];
+    email?: string[];
+    phone?: string[];
+    address?: string[];
+    city?: string[];
+    state?: string[];
+    pincode?: string[];
+  };
+  error?: string;
+};
 export async function login(
   prevState: AuthState,
   formData: FormData,
@@ -137,4 +155,71 @@ export async function register(
     };
   }
   redirect("/login");
+}
+
+export async function profileUpdateAction(
+  prevState: ProfileState,
+  formData: FormData,
+): Promise<ProfileState> {
+  try {
+    const data = {
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      home: formData.get("home"),
+      city: formData.get("city"),
+      state: formData.get("state"),
+      pincode: formData.get("pincode"),
+    };
+
+    // ✅ Validate
+    const parsed = profileFormValidator.safeParse(data);
+    if (!parsed.success) {
+      return {
+        success: false,
+        formErrors: parsed.error.flatten().fieldErrors,
+      };
+    }
+
+    const validData = parsed.data;
+
+    // ✅ Get logged user
+    const user = await getLoggedInUser();
+    if (!user) {
+      return {
+        success: false,
+        error: "Unauthorized",
+      };
+    }
+
+    await connectDB();
+
+    // ✅ UPDATE USER (NOT CREATE)
+    await User.findByIdAndUpdate(
+      user.userId,
+      {
+        firstName: validData.firstName,
+        lastName: validData.lastName,
+        phone: Number(validData.phone),
+        address: {
+          home: validData.home,
+          city: validData.city,
+          state: validData.state,
+          pincode: Number(validData.pincode),
+        },
+      },
+      { new: true }, // returns updated doc
+    );
+    return {
+      success: true,
+      updatedAt: Date.now(),
+    };
+  } catch (error: any) {
+    console.error("Error during Profile update:", error);
+    return {
+      success: false,
+      error: "Failed to update profile",
+    };
+  }
 }
