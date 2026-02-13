@@ -20,11 +20,11 @@ export async function decreaseUserQty(userId: string, productId: string) {
 
   if (!item) return;
 
-  item.qty -= 1;
+  item.qty = item.qty > 1 ? item.qty - 1 : item.qty;
 
-  if (item.qty <= 0) {
-    cart.items = cart.items.filter((i) => i.productId.toString() !== productId);
-  }
+  // if (item.qty <= 0) {
+  //   cart.items = cart.items.filter((i) => i.productId.toString() !== productId);
+  // }
 
   await cart.save();
 }

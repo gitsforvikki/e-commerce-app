@@ -3,8 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/ui/navbar/Navbar";
 import { AuthProvider } from "@/context/auth-context";
 import "./globals.css";
-import { getLoggedInUser } from "@/lib/auth";
-import { getCartItemsFromDB } from "@/services/cart/get-cart-fromdb.service";
 import { Footer } from "@/ui/Footer";
 
 const geistSans = Geist({
@@ -27,10 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const user = await getLoggedInUser();
-
-  // const cartItems = await getCartItemsFromDB(user?.userId);
-
   return (
     <html lang="en">
       <body

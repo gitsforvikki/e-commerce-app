@@ -20,9 +20,9 @@ export async function decreaseGuestQty(productId: string) {
 
   item.qty = item.qty > 1 ? item.qty - 1 : item.qty;
 
-  if (item.qty <= 0) {
-    return removeGuestItem(productId);
-  }
+  // if (item.qty <= 0) {
+  //   return removeGuestItem(productId);
+  // }
 
   await saveToGuestCart(cart);
 }

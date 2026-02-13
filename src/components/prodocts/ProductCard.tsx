@@ -10,7 +10,6 @@ import { useAuth } from "@/context/auth-context";
 export const ProductCard = ({ _id, image, name, price }: ProductType) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { user } = useAuth();
   return (
     <Link
       href={`/product/${_id}`}

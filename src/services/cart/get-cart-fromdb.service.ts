@@ -6,9 +6,6 @@ export const totalTax = (total: number) => {
   return total / 10;
 };
 
-const grandTotal = (total: number) => {
-  return totalTax(total) + total;
-};
 export async function getCartItemsFromDB(userId?: string) {
   let items: { productId: string; qty: number }[] = [];
 

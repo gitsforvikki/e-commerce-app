@@ -1,38 +1,38 @@
 "use client";
 
+import Image from "next/image";
 import { updateCartAction } from "@/server-actions/cart.action";
 import { useCartStore } from "@/store/cartStore";
 import { CartItemUiType } from "@/type";
 import { Trash2, Plus, Minus, ArrowRight } from "lucide-react";
-import Image from "next/image";
 
-export const CartItemCart = (item: CartItemUiType) => {
+export const CartItemCard = (item: CartItemUiType) => {
   const { _id, name, price, image, qty, total } = item;
   const { updateQty, removeItem } = useCartStore();
 
-  //  INCREASE QTY
   const handleIncrease = async () => {
+    //this is for udpate the cookies & DB on server side
     await updateCartAction(item._id, "inc");
 
-    // update UI state
+    // update UI state/zustand store on client side
     updateQty(item._id, item.qty + 1);
   };
 
-  //  DECREASE QTY
   const handleDecrease = async () => {
+    //this is for udpate the cookies & DB on server side
     await updateCartAction(item._id, "dec");
 
-    if (item.qty === 1) {
-      removeItem(item._id);
-    } else {
+    if (item.qty > 1) {
+      // update UI state/zustand store on client side
       updateQty(item._id, item.qty - 1);
     }
   };
 
-  //  REMOVE ITEM
   const handleRemove = async () => {
+    //this is for udpate the cookies & DB on server side
     await updateCartAction(item._id, "remove");
 
+    // update UI state/zustand store on client side
     removeItem(item._id);
   };
 

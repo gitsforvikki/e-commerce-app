@@ -2,7 +2,7 @@ import { OrderSummery } from "@/components/order/OrderSummery";
 import { getLoggedInUser } from "@/lib/auth";
 import { getCartItemsFromDB } from "@/services/cart/get-cart-fromdb.service";
 import { CartItemUiType } from "@/type";
-import { CartItemCart } from "@/ui/cart-ui/CartItemCard";
+import { CartItemCard } from "@/ui/cart-ui/CartItemCard";
 import { EmptyCart } from "@/ui/cart-ui/EmptyCart";
 import Link from "next/link";
 
@@ -43,7 +43,7 @@ export default async function CartPage() {
                   </div>
 
                   {items.map((item, index) => (
-                    <CartItemCart key={index} {...item} />
+                    <CartItemCard key={index} {...item} />
                   ))}
                 </div>
 
