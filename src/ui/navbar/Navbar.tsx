@@ -3,23 +3,35 @@ import Link from "next/link";
 import { useState } from "react";
 import { ShoppingCart, Search, Menu, X } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
-import "./style.css";
 import { routes } from "@/utils/routes";
+import { useCartStore } from "@/store/cartStore";
+import "./style.css";
+import { logoutAndUpdateCookiesCart } from "@/server-actions/cart.action";
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, loading, refreshUser } = useAuth();
+  const { items, setCart } = useCartStore();
+  const tatalCartItems = items?.reduce((acc, curr) => {
+    return acc + curr.qty;
+  }, 0);
 
-  //handle logout
-  const handleLogout = () => {
+  // handle logout
+  const handleLogout = async () => {
     try {
-      fetch("/api/logout", {
-        method: "POST",
-      }).then((res) => {
-        if (res.ok) {
-          refreshUser();
-        }
-      });
+      await logoutAndUpdateCookiesCart();
+      refreshUser();
+      const res = await fetch("/api/cart");
+      const data = await res.json();
+      console.log("set items from the nav logout", items);
+      setCart(data?.items);
+      // fetch("/api/logout", {
+      //   method: "POST",
+      // }).then((res) => {
+      //   if (res.ok) {
+      //     refreshUser();
+      //   }
+      // });
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -75,7 +87,7 @@ export const Navbar = () => {
                   className="text-foreground group-hover:text-primary transition-colors"
                 />
                 <span className="absolute top-1 right-1 w-5 h-5 bg-violet-600 text-white text-xs rounded-full flex items-center justify-center">
-                  0
+                  {tatalCartItems}
                 </span>
               </button>
             </Link>

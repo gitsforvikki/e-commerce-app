@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const CART_KEY = "cart";
 
@@ -30,22 +31,16 @@ export const saveToGuestCart = async (cartItems: guestCartType[]) => {
 
 //add to guest cart
 export const addToGuestCart = async (productId: string) => {
-  try {
-    const cartItems = await getGuestCart();
-    const existingItem = cartItems.find(
-      (item: guestCartType) =>
-        item.productId.toString() === productId.toString(),
-    );
-    if (existingItem) {
-      existingItem.qty += 1;
-    } else {
-      cartItems.push({ productId, qty: 1 });
-    }
-    await saveToGuestCart(cartItems);
-  } catch (err) {
-    console.error(err);
-    throw new Error("Add to guest cart FAILED");
+  const cartItems = await getGuestCart();
+  const existingItem = cartItems.find(
+    (item: guestCartType) => item.productId.toString() === productId.toString(),
+  );
+  if (existingItem) {
+    redirect("/login");
+  } else {
+    cartItems.push({ productId, qty: 1 });
   }
+  await saveToGuestCart(cartItems);
 };
 
 export async function clearGuestCart() {

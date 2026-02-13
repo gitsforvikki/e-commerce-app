@@ -14,7 +14,7 @@ export async function mergeGuestCart(userId: string) {
     );
 
     if (existing) {
-      existing.qty += item.qty;
+      existing.qty = existing.qty;
     } else {
       dbCart.items.push({
         productId: new Types.ObjectId(item.productId),

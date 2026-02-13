@@ -5,14 +5,32 @@ import Link from "next/link";
 import { ProductType } from "@/type";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { addToCartAction } from "@/server-actions/cart.action";
-import { useAuth } from "@/context/auth-context";
+import { useCartStore } from "@/store/cartStore";
 
 export const ProductCard = ({ _id, image, name, price }: ProductType) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const { addItem } = useCartStore();
+
+  const handleAdd = () => {
+    startTransition(async () => {
+      // zusntant store/client/UI update FIRST
+      addItem({
+        _id: _id,
+        name: name,
+        image: image,
+        price: price,
+        qty: 1,
+        total: price,
+      });
+
+      //Then update DB/cookies
+      await addToCartAction(_id);
+    });
+  };
   return (
-    <Link
-      href={`/product/${_id}`}
+    <div
+      // href={`/product/${_id}`}
       className="group h-full rounded-lg overflow-hidden bg-card border border-border hover:shadow-lg transition-all duration-300 hover:border-primary/30"
     >
       {/* Image Container */}
@@ -51,7 +69,7 @@ export const ProductCard = ({ _id, image, name, price }: ProductType) => {
         {/* Add to cart on hover - Mobile friendly overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-end p-4 opacity-0 group-hover:opacity-100">
           <button
-            onClick={() => startTransition(() => addToCartAction(_id))}
+            onClick={() => handleAdd()}
             className="cursor-pointer w-full bg-violet-600 text-white py-2 rounded-lg font-medium hover:bg-violet-700 transition-colors flex items-center justify-center gap-2"
           >
             <ShoppingCart size={18} />
@@ -97,6 +115,6 @@ export const ProductCard = ({ _id, image, name, price }: ProductType) => {
           )} */}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

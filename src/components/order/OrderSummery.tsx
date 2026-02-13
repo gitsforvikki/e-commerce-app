@@ -6,7 +6,6 @@ import Link from "next/link";
 
 export const OrderSummery = async () => {
   const userInfo = await getLoggedInUser();
-
   const items: CartItemUiType[] = await getCartItemsFromDB(userInfo?.userId);
   const grandTotal = items.reduce((acc, curr) => acc + curr.total, 0);
   const totalTax = () => {

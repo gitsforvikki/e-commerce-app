@@ -4,6 +4,10 @@ import { Navbar } from "@/ui/navbar/Navbar";
 import { AuthProvider } from "@/context/auth-context";
 import "./globals.css";
 import { Footer } from "@/ui/Footer";
+import { getCartItemsFromDB } from "@/services/cart/get-cart-fromdb.service";
+import { getCurrentUserData } from "@/services/user/user.service";
+import { CartItemUiType } from "@/type";
+import CartProvider from "@/utils/cart/cart-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,15 +29,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const userInfo = await getCurrentUserData();
+  const items: CartItemUiType[] = await getCartItemsFromDB(userInfo?.userId);
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <CartProvider initialItems={items}>
+            <Navbar />
+            {children}
+            <Footer />
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>
