@@ -10,6 +10,7 @@ const initialState = {
 };
 export const ProfileMainPAge = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { user, refreshUser } = useAuth();
   const [state, formAction, isPending] = useActionState(
     profileUpdateAction,
@@ -20,6 +21,12 @@ export const ProfileMainPAge = () => {
     if (state.success) {
       refreshUser();
       setIsEditing(false);
+      setShowSuccess(true);
+      let timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
+
+      return () => clearInterval(timer);
     }
   }, [state.updatedAt]);
   return (
@@ -31,7 +38,7 @@ export const ProfileMainPAge = () => {
         {!isEditing && (
           <button
             onClick={() => setIsEditing(true)}
-            className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
+            className="flex items-center gap-2 text-indigo-600 font-bold hover:text-indigo-600 font-bold/80 font-medium transition-colors"
           >
             <Edit2 size={18} />
             Edit
@@ -42,7 +49,7 @@ export const ProfileMainPAge = () => {
       {isEditing ? (
         <div>
           <form action={formAction} className="space-y-6">
-            <div className="bg-gray-50 border border-slate-300 shadow-2xl rounded-lg p-6 space-y-5">
+            <div className=" border border-slate-300 shadow-sm rounded-lg p-6 space-y-5">
               {/* FIRST + LAST NAME */}
               <div className="flex flex-col lg:flex-row gap-5">
                 <div className="w-full">
@@ -217,25 +224,18 @@ export const ProfileMainPAge = () => {
               </button>
               <button
                 onClick={() => setIsEditing(false)}
-                className="flex-1 px-4 py-2 border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium"
+                className="flex-1 px-4 py-2 border border-gray-300 text-foreground rounded-lg hover:bg-indigo-100 transition-colors font-medium"
               >
                 Cancel
               </button>
             </div>
-
-            {/* SUCCESS MESSAGE */}
-            {state.success && (
-              <p className="text-green-600 font-medium">
-                ✅ Profile updated successfully
-              </p>
-            )}
           </form>
         </div>
       ) : (
         <div className="space-y-4">
           {/* Display Mode */}
-          <div className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg">
-            <User size={20} className="text-primary shrink-0" />
+          <div className="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg">
+            <User size={20} className="text-indigo-600 font-bold shrink-0" />
             <div>
               <p className="text-sm text-muted-foreground">Full Name</p>
               <p className="font-semibold text-foreground">
@@ -244,24 +244,24 @@ export const ProfileMainPAge = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg">
-            <Mail size={20} className="text-primary shrink-0" />
+          <div className="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg">
+            <Mail size={20} className="text-indigo-600 font-bold shrink-0" />
             <div>
               <p className="text-sm text-muted-foreground">Email Address</p>
               <p className="font-semibold text-foreground">{user?.email}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg">
-            <Phone size={20} className="text-primary shrink-0" />
+          <div className="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg">
+            <Phone size={20} className="text-indigo-600 font-bold  shrink-0" />
             <div>
               <p className="text-sm text-muted-foreground">Phone Number</p>
               <p className="font-semibold text-foreground">{user?.phone}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg">
-            <MapPin size={20} className="text-primary shrink-0" />
+          <div className="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg">
+            <MapPin size={20} className="text-indigo-600 font-bold shrink-0" />
             <div>
               <p className="text-sm text-muted-foreground">Address</p>
               <p className="font-semibold text-foreground">
@@ -269,6 +269,12 @@ export const ProfileMainPAge = () => {
               </p>
             </div>
           </div>
+          {/* SUCCESS MESSAGE */}
+          {state.success && showSuccess && (
+            <p className="text-green-600 font-medium">
+              ✅ Profile updated successfully
+            </p>
+          )}
         </div>
       )}
     </div>

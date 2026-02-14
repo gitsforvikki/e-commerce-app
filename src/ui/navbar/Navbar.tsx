@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { ShoppingCart, Search, Menu, X } from "lucide-react";
+import { ShoppingCart, Search, Menu, X, User } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 import { routes } from "@/utils/routes";
 import { useCartStore } from "@/store/cartStore";
@@ -23,22 +23,15 @@ export const Navbar = () => {
       refreshUser();
       const res = await fetch("/api/cart");
       const data = await res.json();
-      console.log("set items from the nav logout", items);
       setCart(data?.items);
-      // fetch("/api/logout", {
-      //   method: "POST",
-      // }).then((res) => {
-      //   if (res.ok) {
-      //     refreshUser();
-      //   }
-      // });
+      setIsMobileMenuOpen(false);
     } catch (error) {
       console.error("Error during logout:", error);
     }
   };
   if (loading) return null;
   return (
-    <nav className="bg-white border-b border-border sticky top-0 z-50">
+    <nav className="bg-white border-b border-gray-300 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -59,28 +52,25 @@ export const Navbar = () => {
             <Link href={routes.PRODUCTS} className="navbar-links">
               Products
             </Link>
-            <Link href={routes.ABOUT} className="navbar-links">
-              About
-            </Link>
-            <Link href={routes.CONTACT} className="navbar-links">
-              Contact
+            <Link href={routes.ORDER} className="navbar-links">
+              Orders
             </Link>
           </div>
 
           {/* Right side icons and buttons */}
           <div className="flex items-center gap-4">
             {/* Search */}
-            <button className="hidden lg:flex items-center gap-2 bg-muted rounded-full px-4 py-2 hover:bg-accent/10 transition-colors">
+            {/* <button className="hidden lg:flex items-center gap-2 bg-muted rounded-full px-4 py-2 hover:bg-accent/10 transition-colors">
               <Search size={18} className="text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search..."
                 className="bg-transparent outline-none text-sm w-32 placeholder-muted-foreground"
               />
-            </button>
+            </button> */}
 
             {/* Cart */}
-            <Link href={routes.CART}>
+            <Link href={routes.CART} className="hidden md:flex">
               <button className="relative p-2 hover:bg-muted rounded-lg transition-colors group">
                 <ShoppingCart
                   size={25}
@@ -94,8 +84,19 @@ export const Navbar = () => {
 
             {/* Auth buttons - Desktop */}
             {user ? (
-              <div className="flex items-center gap-2">
-                <span className="text-foreground">{user?.firstName} </span>
+              <div className="hidden md:flex  items-center gap-3">
+                <div className="flex gap-x-2 items-center hover:bg-violet-600 hover:text-white rounded-4xl py-2 px-3 cursor-pointer">
+                  <span className="text-foreground">{user?.firstName} </span>
+                  <Link
+                    href={routes.PROFILE}
+                    className="hover:bg-muted rounded-lg transition-colors group hidden sm:block"
+                  >
+                    <User
+                      size={20}
+                      className="text-foreground group-hover:text-primary transition-colors"
+                    />
+                  </Link>
+                </div>
                 <button
                   onClick={handleLogout}
                   className="px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-colors font-medium"
@@ -144,31 +145,64 @@ export const Navbar = () => {
             >
               Home
             </Link>
-            <Link href={routes.PRODUCTS} className="navbar-links-mobile">
+            <Link
+              href={routes.PRODUCTS}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="navbar-links-mobile"
+            >
               Products
             </Link>
-            <Link href={routes.ABOUT} className="navbar-links-mobile">
-              About
+            <Link
+              href={routes.ORDER}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="navbar-links-mobile"
+            >
+              Orders
             </Link>
-            <Link href={routes.CART} className="navbar-links-mobile">
+            {user && (
+              <Link
+                href={routes.PROFILE}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="navbar-links-mobile"
+              >
+                Profile:{" "}
+                <span className="uppercase text-violet-600 italic font-semibold text-lg">
+                  {user?.firstName}
+                </span>
+              </Link>
+            )}
+            <Link
+              href={routes.CART}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="navbar-links-mobile"
+            >
               Cart
             </Link>
-            <div className="border-t border-border pt-3 space-y-2">
-              <Link
-                href={routes.LOGIN}
-                className="navbar-links-mobile"
-                onClick={() => setIsMobileMenuOpen(false)}
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="w-full px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-colors font-medium"
               >
-                Sign In
-              </Link>
-              <Link
-                href={routes.REGISTER}
-                className="navbar-links-mobile bg-violet-500 text-white hover:bg-violet-600 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Register
-              </Link>
-            </div>
+                Logout
+              </button>
+            ) : (
+              <div className="border-t border-border pt-3 space-y-2">
+                <Link
+                  href={routes.LOGIN}
+                  className="navbar-links-mobile"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href={routes.REGISTER}
+                  className="navbar-links-mobile bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
