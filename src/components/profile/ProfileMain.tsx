@@ -3,6 +3,7 @@ import { useAuth } from "@/context/auth-context";
 import { profileUpdateAction } from "@/server-actions/auth.actions";
 import { Edit2, Mail, MapPin, Phone, User } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
+import { DisplayUser } from "./DisplayUser";
 
 const initialState = {
   success: false,
@@ -234,7 +235,7 @@ export const ProfileMainPAge = () => {
       ) : (
         <div className="space-y-4">
           {/* Display Mode */}
-          <div className="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg">
+          {/* <div className="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg">
             <User size={20} className="text-indigo-600 font-bold shrink-0" />
             <div>
               <p className="text-sm text-muted-foreground">Full Name</p>
@@ -268,7 +269,8 @@ export const ProfileMainPAge = () => {
                 {user?.address.city}
               </p>
             </div>
-          </div>
+          </div> */}
+          <DisplayUser />
           {/* SUCCESS MESSAGE */}
           {state.success && showSuccess && (
             <p className="text-green-600 font-medium">
