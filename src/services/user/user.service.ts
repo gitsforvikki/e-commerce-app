@@ -1,8 +1,10 @@
 import { getLoggedInUser } from "@/lib/auth";
+import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
 
 export async function getCurrentUserData() {
   try {
+    await connectDB();
     const userInfo = await getLoggedInUser();
     if (!userInfo?.userId) return null;
     const userFromDB = await User.findById(userInfo?.userId);
