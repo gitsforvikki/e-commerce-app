@@ -7,7 +7,7 @@ export const routes = {
   ABOUT: "/about",
   CONTACT: "/contact",
   PROFILE:"/profile",
-  ORDER:"/order",
+  ORDER:"/orders",
   CHECKOUT:"/checkout",
   SPECIFIC_PRODUCT: (slug: string) => `product/${slug}`,
 };
