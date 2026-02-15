@@ -1,5 +1,6 @@
 import { OrderSummery } from "@/components/order/OrderSummery";
 import { DisplayUser } from "@/components/profile/DisplayUser";
+import { PlaceOrderButton } from "@/ui/PlaceOrderButton";
 import { routes } from "@/utils/routes";
 import { Edit2 } from "lucide-react";
 import Link from "next/link";
@@ -25,7 +26,9 @@ export default function CheckoutPage() {
         </div>
         <h1 className="text-3xl font-bold text-foreground mb-8">Checkout</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <OrderSummery isLink={false} />
+          <OrderSummery>
+            <PlaceOrderButton />
+          </OrderSummery>
           {/* Left Side - Cart Items & Checkout Form */}
           <div className="lg:col-span-2 space-y-8 border border-gray-300 py-6 px-4 rounded-xl shadow-lg">
             <div className="flex items-center justify-between">

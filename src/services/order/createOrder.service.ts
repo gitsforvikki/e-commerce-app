@@ -3,13 +3,13 @@ import { Order } from "@/models/Order-model";
 import { Product } from "@/models/Product";
 import mongoose, { Types } from "mongoose";
 
-interface ShippingAddressType {
+export interface ShippingAddressType {
   name: string;
   phone: string;
   city: string;
+  home: string;
   state: string;
   pincode: string;
-  addressLine: string;
 }
 
 export const createOrderService = async ({
@@ -69,26 +69,26 @@ export const createOrderService = async ({
       });
     }
     //create order
-    const order = await Order.create(
-      [
-        {
-          userId: new Types.ObjectId(userId),
-          items: orderITems,
-          totalAmount,
-          shippingAddress,
-          payment: {
-            status: "PENDING",
-          },
-          status: "PENDING",
-        },
-      ],
-      { session },
-    );
+    const order = new Order({
+      userId: new Types.ObjectId(userId),
+      items: orderITems,
+      totalAmount,
+      shippingAddress,
+
+      payment: {
+        status: "PENDING",
+        method:"Razorpay"
+      },
+
+      status: "CREATED",
+    });
+
+    await order.save({ session });
 
     await session.commitTransaction();
     return {
       success: true,
-      order: order[0],
+      order: order,
     };
   } catch (err: any) {
     console.log(err);

@@ -4,8 +4,13 @@ import { CartItemUiType } from "@/type";
 import { routes } from "@/utils/routes";
 import { ArrowRight, Package } from "lucide-react";
 import Link from "next/link";
+import React from "react";
 
-export const OrderSummery = async ({ isLink = true }: { isLink?: boolean }) => {
+export const OrderSummery = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const userInfo = await getLoggedInUser();
   const items: CartItemUiType[] = await getCartItemsFromDB(userInfo?.userId);
   const grandTotal = items.reduce((acc, curr) => acc + curr.total, 0);
@@ -57,26 +62,7 @@ export const OrderSummery = async ({ isLink = true }: { isLink?: boolean }) => {
               </div>
             </div>
 
-            {items.length > 0 ? (
-              isLink ? (
-                <Link
-                  href="/checkout"
-                  className="w-full bg-violet-600 text-white py-3 rounded-lg font-semibold hover:bg-violet-700 transition-colors flex items-center justify-center gap-2"
-                >
-                  Proceed to Checkout
-                  <ArrowRight size={18} />
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  className="w-full bg-violet-600 text-white py-3 rounded-lg font-semibold hover:bg-violet-700 transition-colors flex items-center justify-center gap-2"
-                  // onClick={handleCheckout} // optional
-                >
-                  Proceed to Checkout
-                  <ArrowRight size={18} />
-                </button>
-              )
-            ) : null}
+            <div>{items.length > 0 ? children : null}</div>
 
             {grandTotal > 0 && grandTotal < 1000 && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">

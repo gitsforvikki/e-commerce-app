@@ -6,7 +6,7 @@ export async function getCurrentUserData() {
     const userInfo = await getLoggedInUser();
     if (!userInfo?.userId) return null;
     const userFromDB = await User.findById(userInfo?.userId);
-    if (!userInfo) return null;
+    if (!userFromDB) return null;
     return {
       userId: userFromDB._id.toString(),
       role: userFromDB.role,

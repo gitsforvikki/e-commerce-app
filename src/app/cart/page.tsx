@@ -6,6 +6,7 @@ import { getLoggedInUser } from "@/lib/auth";
 import { getCartItemsFromDB } from "@/services/cart/get-cart-fromdb.service";
 import { CartItemUiType } from "@/type";
 import { EmptyCart } from "@/ui/cart-ui/EmptyCart";
+import { routes } from "@/utils/routes";
 
 export const metadata: Metadata = {
   title: "Shopping Cart | ShopHub",
@@ -42,7 +43,14 @@ export default async function CartPage() {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <CartList />
-              <OrderSummery />
+              <OrderSummery>
+                <Link
+                  href={routes.CHECKOUT}
+                  className="w-full bg-violet-600 text-white py-3 rounded-lg font-semibold hover:bg-violet-700 transition-colors flex items-center justify-center gap-2"
+                >
+                  Process to checkout
+                </Link>
+              </OrderSummery>
             </div>
           )}
         </div>
