@@ -45,7 +45,6 @@ export const logoutAndUpdateCookiesCart = async () => {
 
     //remove token and logged out user
     (await cookies()).delete("token");
-    
   } catch (err) {
     console.error(err);
   }

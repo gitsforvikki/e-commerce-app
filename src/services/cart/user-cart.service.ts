@@ -1,7 +1,9 @@
+import { connectDB } from "@/lib/db";
 import { Cart, CartDocument } from "@/models/Cart-model";
 import { Types } from "mongoose";
 
 export async function getOrCreateCart(userId: string): Promise<CartDocument> {
+  await connectDB();
   let cart = await Cart.findOne({ userId });
 
   if (!cart) {
