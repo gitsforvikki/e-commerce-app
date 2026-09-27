@@ -8,7 +8,7 @@ export default function ProductDetailsSkeleton() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 animate-pulse items-start">
           {/* LEFT: Image Section */}
           <div>
-            <div className="w-full aspect-square bg-slate-200 dark:bg-slate-850 rounded-3xl" />
+            <div className="w-full aspect-square bg-slate-200 dark:bg-slate-800 rounded-3xl" />
           </div>
 
           {/* RIGHT: Product Info */}

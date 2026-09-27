@@ -226,7 +226,7 @@ export const ProductFiltersSidebar = ({
                     className={`text-xs px-2.5 py-1.5 rounded-lg border font-medium transition-all ${
                       isActive
                         ? "bg-violet-50 dark:bg-violet-950/60 border-violet-500 text-violet-700 dark:text-violet-300 font-semibold"
-                        : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750"
+                        : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
                     }`}
                   >
                     {preset.label}
@@ -266,7 +266,7 @@ export const ProductFiltersSidebar = ({
                   min={0}
                   value={filters.priceRange[0]}
                   onChange={(e) => handleMinPriceChange(Number(e.target.value))}
-                  className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-850 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition"
+                  className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-900 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition"
                 />
               </div>
               <div>
@@ -278,7 +278,7 @@ export const ProductFiltersSidebar = ({
                   min={filters.priceRange[0]}
                   value={filters.priceRange[1]}
                   onChange={(e) => handleMaxPriceChange(Number(e.target.value))}
-                  className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-850 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition"
+                  className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-900 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition"
                 />
               </div>
             </div>
@@ -315,7 +315,7 @@ export const ProductFiltersSidebar = ({
                   placeholder="Filter brands..."
                   value={brandSearch}
                   onChange={(e) => setBrandSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-850 focus:border-violet-500 outline-none transition"
+                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-900 focus:border-violet-500 outline-none transition"
                 />
               </div>
             )}
@@ -360,7 +360,7 @@ export const ProductFiltersSidebar = ({
 
       {/* 4. Availability / Stock Section */}
       <div className="pb-2">
-        <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-750 cursor-pointer hover:bg-slate-100/80 dark:hover:bg-slate-800 transition-colors">
+        <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 cursor-pointer hover:bg-slate-100/80 dark:hover:bg-slate-800 transition-colors">
           <div>
             <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 block">
               In Stock Only

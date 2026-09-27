@@ -52,7 +52,7 @@ export const ActiveFilterChips = ({
 
       {/* Category chip */}
       {hasCategoryFilter && (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-850 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs">
           <span>Category:</span>
           <strong className="capitalize">{filters.selectedCategory.toLowerCase()}</strong>
           <button
@@ -70,7 +70,7 @@ export const ActiveFilterChips = ({
       {filters.selectedBrands.map((brand) => (
         <span
           key={brand}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-850 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs"
         >
           <span>Brand:</span>
           <strong>{brand}</strong>
@@ -87,7 +87,7 @@ export const ActiveFilterChips = ({
 
       {/* Price filter chip */}
       {hasPriceFilter && (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-850 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs">
           <span>Price:</span>
           <strong>
             {formatInr(filters.priceRange[0] * 100)} -{" "}
@@ -106,7 +106,7 @@ export const ActiveFilterChips = ({
 
       {/* Search query chip */}
       {hasSearchFilter && (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-850 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs">
           <span>Search:</span>
           <strong>&ldquo;{filters.searchQuery}&rdquo;</strong>
           <button
@@ -122,7 +122,7 @@ export const ActiveFilterChips = ({
 
       {/* In stock chip */}
       {hasInStockFilter && (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-850 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-slate-900 border border-violet-200 dark:border-violet-800/60 text-violet-700 dark:text-violet-300 text-xs font-medium rounded-lg shadow-2xs">
           <strong>In Stock Only</strong>
           <button
             type="button"

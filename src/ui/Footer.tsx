@@ -182,7 +182,7 @@ export const Footer = () => {
 
         {/* ================= TRUST & VALUE PROPOSITIONS ================= */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <div className="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-850 hover:border-violet-500/30 hover:bg-slate-900/70 transition-all duration-200 group">
+          <div className="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-800 hover:border-violet-500/30 hover:bg-slate-900/70 transition-all duration-200 group">
             <div className="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-violet-500/20 transition-all duration-200">
               <Truck className="w-6 h-6" />
             </div>
@@ -194,7 +194,7 @@ export const Footer = () => {
             </div>
           </div>
 
-          <div className="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-850 hover:border-violet-500/30 hover:bg-slate-900/70 transition-all duration-200 group">
+          <div className="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-800 hover:border-violet-500/30 hover:bg-slate-900/70 transition-all duration-200 group">
             <div className="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-violet-500/20 transition-all duration-200">
               <RotateCcw className="w-6 h-6" />
             </div>
@@ -206,7 +206,7 @@ export const Footer = () => {
             </div>
           </div>
 
-          <div className="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-850 hover:border-violet-500/30 hover:bg-slate-900/70 transition-all duration-200 group">
+          <div className="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-800 hover:border-violet-500/30 hover:bg-slate-900/70 transition-all duration-200 group">
             <div className="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-violet-500/20 transition-all duration-200">
               <ShieldCheck className="w-6 h-6" />
             </div>
@@ -218,7 +218,7 @@ export const Footer = () => {
             </div>
           </div>
 
-          <div className="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-850 hover:border-violet-500/30 hover:bg-slate-900/70 transition-all duration-200 group">
+          <div className="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-slate-800 hover:border-violet-500/30 hover:bg-slate-900/70 transition-all duration-200 group">
             <div className="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-violet-500/20 transition-all duration-200">
               <Headphones className="w-6 h-6" />
             </div>

@@ -6,7 +6,7 @@ export const ProductPageSkeleton = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-pulse">
           <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded-md mb-4" />
           <div className="h-8 w-64 bg-slate-200 dark:bg-slate-800 rounded-lg mb-2" />
-          <div className="h-4 w-96 bg-slate-100 dark:bg-slate-850 rounded-md" />
+          <div className="h-4 w-96 bg-slate-100 dark:bg-slate-800 rounded-md" />
         </div>
       </div>
 

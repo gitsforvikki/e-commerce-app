@@ -81,7 +81,7 @@ export const Navbar = () => {
               <button
                 type="button"
                 aria-label="Shopping Cart"
-                className="relative p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-850 rounded-xl transition-colors group"
+                className="relative p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors group"
               >
                 <ShoppingCart
                   size={22}
@@ -100,7 +100,7 @@ export const Navbar = () => {
               <div className="hidden md:flex items-center gap-2.5">
                 <Link
                   href={routes.PROFILE}
-                  className="flex gap-x-2 items-center bg-slate-50 hover:bg-slate-100 dark:bg-slate-850 dark:hover:bg-slate-800 rounded-xl py-1.5 px-3 cursor-pointer text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-750 transition-colors"
+                  className="flex gap-x-2 items-center bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 rounded-xl py-1.5 px-3 cursor-pointer text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 transition-colors"
                 >
                   <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">{user?.firstName}</span>
                   <User
@@ -111,7 +111,7 @@ export const Navbar = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 rounded-xl transition-colors font-semibold text-xs border border-transparent dark:border-slate-750"
+                  className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl transition-colors font-semibold text-xs border border-transparent dark:border-slate-700"
                 >
                   Logout
                 </button>
@@ -138,7 +138,7 @@ export const Navbar = () => {
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle navigation menu"
-              className="md:hidden p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-850 rounded-xl transition-colors"
+              className="md:hidden p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
             >
               {isMobileMenuOpen ? (
                 <X size={20} />
@@ -214,11 +214,11 @@ export const Navbar = () => {
             )}
 
             {/* Mobile Theme Toggle */}
-            <div className="border-t border-slate-100 dark:border-slate-800 pt-3 px-2 flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 pl-2">
-                Theme
+            <div className="border-t border-slate-100 dark:border-slate-800 pt-3 px-3 flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Appearance
               </span>
-              <ThemeToggle variant="simple" showLabel />
+              <ThemeToggle variant="segmented" />
             </div>
           </div>
         )}

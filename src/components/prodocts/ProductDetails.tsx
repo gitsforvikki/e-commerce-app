@@ -122,7 +122,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
 
             {/* Brand Floating Badge */}
             <div className="absolute top-4 left-4 z-10">
-              <span className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-200 text-xs font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wider border border-slate-200/60 dark:border-slate-750">
+              <span className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-200 text-xs font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wider border border-slate-200/60 dark:border-slate-700">
                 {product.brand}
               </span>
             </div>
@@ -240,7 +240,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                   type="button"
                   onClick={() => setIsFavorite((value) => !value)}
                   aria-pressed={isFavorite}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-850 hover:border-slate-400 dark:hover:border-slate-600 shadow-2xs transition-colors"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-400 dark:hover:border-slate-600 shadow-2xs transition-colors"
                 >
                   <Heart
                     size={18}
@@ -332,7 +332,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
             <button
               type="button"
               onClick={() => toggleSection("description")}
-              className="flex w-full items-center justify-between p-5 text-left text-slate-900 dark:text-white font-bold text-base hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors"
+              className="flex w-full items-center justify-between p-5 text-left text-slate-900 dark:text-white font-bold text-base hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             >
               <span>Product Description</span>
               <ChevronDown
@@ -354,7 +354,7 @@ export default function ProductDetails({ product }: { product: ProductType }) {
             <button
               type="button"
               onClick={() => toggleSection("usage")}
-              className="flex w-full items-center justify-between p-5 text-left text-slate-900 dark:text-white font-bold text-base hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors"
+              className="flex w-full items-center justify-between p-5 text-left text-slate-900 dark:text-white font-bold text-base hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
             >
               <span>Usage & Care Guide</span>
               <ChevronDown

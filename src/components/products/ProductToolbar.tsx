@@ -157,7 +157,7 @@ export const ProductToolbar = ({
                 className={`text-xs px-3.5 py-1.5 rounded-full font-semibold transition-all ${
                   isActive
                     ? "bg-violet-600 text-white shadow-sm shadow-violet-200 dark:shadow-none"
-                    : "bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-750 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
+                    : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
                 }`}
               >
                 <span className="capitalize">
