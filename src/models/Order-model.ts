@@ -1,9 +1,9 @@
-import mongoose, { HydratedDocument, Types } from "mongoose";
+import mongoose, { HydratedDocument, Model, Types } from "mongoose";
 
 export interface OrderItem {
   productId: Types.ObjectId;
   name: string;
-  price: number;
+  pricePaise: number;
   image: string;
   qty: number;
 }
@@ -19,6 +19,9 @@ export interface ShippingAddress {
 
 export interface PaymentInfo {
   paymentId?: string;
+  providerOrderId?: string;
+  refundId?: string;
+  refundStatus?: "PENDING" | "PROCESSED" | "FAILED";
   method?: string;
   status: "PENDING" | "SUCCESS" | "FAILED";
 }
@@ -26,7 +29,11 @@ export interface PaymentInfo {
 export interface Order {
   userId: Types.ObjectId;
   items: OrderItem[];
+  subtotalAmount: number;
+  taxAmount: number;
+  shippingAmount: number;
   totalAmount: number;
+  currency: string;
   shippingAddress: ShippingAddress;
   payment: PaymentInfo;
   status:
@@ -36,6 +43,8 @@ export interface Order {
     | "SHIPPED"
     | "DELIVERED"
     | "CANCELLED";
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type OrderDocument = HydratedDocument<Order>;
@@ -56,16 +65,21 @@ const orderSchema = new mongoose.Schema(
           required: true,
         },
         name: { type: String, required: true },
-        price: { type: Number, required: true },
+        pricePaise: { type: Number, required: true, min: 0 },
         image: { type: String },
         qty: { type: Number, required: true },
       },
     ],
 
+    subtotalAmount: { type: Number, required: true, min: 0 },
+    taxAmount: { type: Number, required: true, min: 0 },
+    shippingAmount: { type: Number, required: true, min: 0 },
     totalAmount: {
       type: Number,
       required: true,
+      min: 0,
     },
+    currency: { type: String, required: true, enum: ["INR"] },
 
     shippingAddress: {
       name: { type: String, required: true },
@@ -78,6 +92,9 @@ const orderSchema = new mongoose.Schema(
 
     payment: {
       paymentId: String,
+      providerOrderId: String,
+      refundId: String,
+      refundStatus: { type: String, enum: ["PENDING", "PROCESSED", "FAILED"] },
       method: String,
       status: {
         type: String,
@@ -106,4 +123,5 @@ const orderSchema = new mongoose.Schema(
 );
 
 export const Order =
-  mongoose.models.Order || mongoose.model<Order>("Order", orderSchema);
+  (mongoose.models.Order as Model<Order> | undefined) ||
+  mongoose.model<Order>("Order", orderSchema);
