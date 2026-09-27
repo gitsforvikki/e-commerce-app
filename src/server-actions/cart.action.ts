@@ -7,23 +7,45 @@ import { saveToGuestCart } from "@/services/cart/guest-cart.services";
 import { updateCartQty } from "@/utils/cart/updateCart.helper";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { Types } from "mongoose";
+import { requireUser } from "@/lib/access-control";
 
-export async function addToCartAction(productId: string) {
-  const userInfo = await getLoggedInUser();
+function validateProductId(productId: string) {
+  if (typeof productId !== "string" || !Types.ObjectId.isValid(productId)) {
+    throw new Error("Invalid product ID");
+  }
+}
+
+export async function addToCartAction(productId: string, quantity = 1) {
+  validateProductId(productId);
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
+    throw new Error("Invalid quantity");
+  }
+  const session = await getLoggedInUser();
+  const userInfo = session ? await requireUser() : null;
 
   await addToCart({
-    userId: userInfo?.userId,
+    userId: userInfo?._id.toString(),
     productId,
+    quantity,
   });
 }
 
-export async function updateCartAction(productId: string, type: string) {
-  const user = await getLoggedInUser();
+export async function updateCartAction(
+  productId: string,
+  type: "inc" | "dec" | "remove",
+) {
+  validateProductId(productId);
+  if (type !== "inc" && type !== "dec" && type !== "remove") {
+    throw new Error("Invalid cart operation");
+  }
+  const session = await getLoggedInUser();
+  const user = session ? await requireUser() : null;
 
   await updateCartQty({
-    userId: user?.userId,
+    userId: user?._id.toString(),
     productId,
-    type: type as any,
+    type,
   });
   revalidatePath("/cart");
 }
@@ -45,7 +67,8 @@ export const logoutAndUpdateCookiesCart = async () => {
 
     //remove token and logged out user
     (await cookies()).delete("token");
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Unable to preserve cart during logout", error);
+    throw error;
   }
 };

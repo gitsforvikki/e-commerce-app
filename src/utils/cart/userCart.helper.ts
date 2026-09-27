@@ -1,4 +1,5 @@
 import { getOrCreateCart } from "@/services/cart/user-cart.service";
+import { Product } from "@/models/Product";
 
 //increase cart items
 export async function increaseUserQty(userId: string, productId: string) {
@@ -7,6 +8,10 @@ export async function increaseUserQty(userId: string, productId: string) {
   const item = cart.items.find((i) => i.productId.toString() === productId);
 
   if (item) {
+    const product = await Product.findById(productId).select("qty");
+    if (!product || item.qty >= product.qty || item.qty >= 99) {
+      throw new Error("No additional stock is available");
+    }
     item.qty += 1;
     await cart.save();
   }
