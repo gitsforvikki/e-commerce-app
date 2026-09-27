@@ -9,13 +9,14 @@ export const productSchemaValidator = z.object({
   price: z.number().min(0, "Price must be a positive number"),
   description: z
     .string()
-    .max(500, "Description must be at most 500 characters long")
-    .optional(),
+    .min(1, "Product description is required")
+    .max(500, "Description must be at most 500 characters long"),
   image: z.string().url("Invalid image URL"),
   qty: z
     .number()
     .int("Quantity must be an integer")
-    .min(0, "Quantity cannot be negative"),
+    .min(0, "Quantity cannot be negative")
+    .max(1_000_000, "Quantity is too large"),
   brand: z
     .string()
     .min(2, "Brand name must be at least 2 characters long")
@@ -24,9 +25,8 @@ export const productSchemaValidator = z.object({
   category: CategoryEnum.refine(Boolean, {
     message: "Category must be one of: KIDS, MEN, WOMEN",
   }),
-  stock: z.number().min(0, "Stock cannot be negative"),
   usage: z
     .string()
-    .max(300, "Usage information must be at most 300 characters long")
-    .optional(),
+    .min(1, "Product usage information is required")
+    .max(300, "Usage information must be at most 300 characters long"),
 });
