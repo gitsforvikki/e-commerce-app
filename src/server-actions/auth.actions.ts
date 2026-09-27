@@ -10,8 +10,6 @@ import { User } from "@/models/User";
 import { registerUserValidator } from "@/validators/registerUserValidator";
 import { mergeGuestCart } from "@/services/cart/merge-cart.service";
 import { profileFormValidator } from "@/validators/profileValidator";
-import { Types } from "mongoose";
-import { revalidatePath } from "next/cache";
 
 type AuthState = {
   success: boolean;
@@ -88,7 +86,7 @@ export async function login(
     return {
       success: true,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error during login:", error);
     return {
       success: false,
@@ -147,7 +145,7 @@ export async function register(
     //respond with success
 
     // return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error during registration:", error);
     return {
       success: false,
@@ -215,7 +213,7 @@ export async function profileUpdateAction(
       success: true,
       updatedAt: Date.now(),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error during Profile update:", error);
     return {
       success: false,

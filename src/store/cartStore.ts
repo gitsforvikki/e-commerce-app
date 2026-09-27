@@ -1,9 +1,18 @@
 import { create } from "zustand";
 
+export interface CartItem {
+  _id: string;
+  name: string;
+  image: string;
+  price: number;
+  qty: number;
+  total: number;
+}
+
 interface CartState {
-  items: any[];
-  setCart: (items: any[]) => void;
-  addItem: (item: any) => void;
+  items: CartItem[];
+  setCart: (items: CartItem[]) => void;
+  addItem: (item: CartItem) => void;
   updateQty: (id: string, qty: number) => void;
   removeItem: (id: string) => void;
 }
@@ -20,7 +29,13 @@ export const useCartStore = create<CartState>((set) => ({
       if (exists) {
         return {
           items: state.items.map((i) =>
-            i._id === item._id ? { ...i, qty: i.qty + 1 } : i,
+            i._id === item._id
+              ? {
+                  ...i,
+                  qty: i.qty + (item.qty ?? 1),
+                  total: i.price * (i.qty + (item.qty ?? 1)),
+                }
+              : i,
           ),
         };
       }
@@ -31,7 +46,9 @@ export const useCartStore = create<CartState>((set) => ({
     }),
   updateQty: (id, qty) =>
     set((state) => ({
-      items: state.items.map((i) => (i._id === id ? { ...i, qty } : i)),
+      items: state.items.map((i) =>
+        i._id === id ? { ...i, qty, total: i.price * qty } : i,
+      ),
     })),
 
   removeItem: (id) =>

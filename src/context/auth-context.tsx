@@ -1,9 +1,31 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
+type AuthUser = {
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string | number;
+  memberSince?: string;
+  address?: {
+    home?: string;
+    city?: string;
+    state?: string;
+    pincode?: string | number;
+  };
+  [key: string]: unknown;
+};
 
 type AuthContextType = {
-  user: any;
+  user: AuthUser | null;
   loading: boolean;
   refreshUser: () => Promise<void>;
 };
@@ -11,19 +33,23 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     const res = await fetch("/api/me", { cache: "no-store" });
-    const data = await res.json();
+    const data = (await res.json()) as AuthUser | null;
     setUser(data ?? null);
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
-    refreshUser();
-  }, []);
+    const timer = window.setTimeout(() => {
+      void refreshUser();
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [refreshUser]);
 
   return (
     <AuthContext.Provider value={{ user, loading, refreshUser }}>

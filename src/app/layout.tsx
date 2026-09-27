@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/ui/navbar/Navbar";
 import { AuthProvider } from "@/context/auth-context";
-import "./globals.css";
 import { Footer } from "@/ui/Footer";
 import { getCartItemsFromDB } from "@/services/cart/get-cart-fromdb.service";
 import { getCurrentUserData } from "@/services/user/user.service";
 import { CartItemUiType } from "@/type";
 import CartProvider from "@/utils/cart/cart-provider";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

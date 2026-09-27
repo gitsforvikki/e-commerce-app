@@ -1,6 +1,6 @@
 "use server";
 
-import { getLoggedInUser } from "@/lib/auth";
+import { requireRole } from "@/lib/access-control";
 import { uploadProduct } from "@/services/product.services";
 import { productSchemaValidator } from "@/validators/productSchemaValidator";
 import { revalidatePath } from "next/cache";
@@ -15,7 +15,6 @@ export type ProductFormState = {
     qty?: string[];
     brand?: string[];
     category?: string[];
-    stock?: string[];
     description?: string[];
     usage?: string[];
   };
@@ -28,10 +27,7 @@ export async function addProduct(
   formData: FormData,
 ) {
   try {
-    const user = await getLoggedInUser();
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
+    await requireRole("ADMIN");
     //collect form data and create product object
     const rawProduct = {
       name: formData.get("name") as string,
@@ -41,10 +37,19 @@ export async function addProduct(
       qty: Number(formData.get("qty")),
       brand: formData.get("brand") as string,
       category: formData.get("category") as string,
-      stock: Number(formData.get("stock")),
       usage: formData.get("usage") as string,
     };
-    console.log("Raw product" + rawProduct);
+    if (typeof rawProduct.image !== "string") {
+      return { success: false, error: "A valid product image is required" };
+    }
+    const imageUrl = new URL(rawProduct.image);
+    if (
+      imageUrl.protocol !== "https:" ||
+      imageUrl.hostname !== "res.cloudinary.com" ||
+      !imageUrl.pathname.includes("/products/")
+    ) {
+      return { success: false, error: "Select a valid uploaded product image" };
+    }
     //validate form data
     const validatedProduct = productSchemaValidator.safeParse(rawProduct);
     if (!validatedProduct.success) {
@@ -57,15 +62,13 @@ export async function addProduct(
     const product = validatedProduct.data;
     //db action to upload product
     const uploadResult = await uploadProduct(product);
-    console.log("upload Result" + uploadResult);
-
     if (!uploadResult.success) {
       return {
         success: false,
         error: uploadResult.error,
       };
     }
-  } catch (error) {
+  } catch {
     return {
       success: false,
       error: "Failed to add product",

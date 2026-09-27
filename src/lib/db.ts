@@ -18,7 +18,6 @@ type MongooseCache = {
  * Extend global object (Node.js)
  */
 declare global {
-  // eslint-disable-next-line no-var
   var mongoose: MongooseCache | undefined;
 }
 

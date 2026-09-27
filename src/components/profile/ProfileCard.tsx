@@ -1,18 +1,19 @@
 "use client";
 
 import { useAuth } from "@/context/auth-context";
-import { Edit2, Heart, LogOut, ShoppingBag, User } from "lucide-react";
+import { Heart, LogOut, ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
 
 // Default avatar using initials and gradient background
 
 export const ProfileCard = () => {
   const { user } = useAuth();
-  const userName = user?.firstName + " " + user?.lastName;
-  console.log("user form card", userName);
-  const initials = userName
+  const userName = `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim();
+  const safeUserName = userName || "User";
+  const initials = safeUserName
     .split(" ")
-    .map((n: any) => n[0])
+    .filter(Boolean)
+    .map((n) => n[0] ?? "")
     .join("")
     .toUpperCase();
 
@@ -23,7 +24,7 @@ export const ProfileCard = () => {
     "from-pink-400 to-red-500",
   ];
 
-  const colorIndex = userName.length % avatarColors.length;
+  const colorIndex = safeUserName.length % avatarColors.length;
   const avatarColor = avatarColors[colorIndex];
 
   return (
@@ -36,7 +37,7 @@ export const ProfileCard = () => {
           {initials}
         </div>
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground">{userName}</h2>
+          <h2 className="text-2xl font-bold text-foreground">{safeUserName}</h2>
           <p className="text-sm text-muted-foreground">{user?.memberSince}</p>
         </div>
       </div>

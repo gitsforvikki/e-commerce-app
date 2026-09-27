@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/context/auth-context";
 import { profileUpdateAction } from "@/server-actions/auth.actions";
-import { Edit2, Mail, MapPin, Phone, User } from "lucide-react";
+import { Edit2 } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { DisplayUser } from "./DisplayUser";
 
@@ -19,17 +19,23 @@ export const ProfileMainPAge = () => {
   );
 
   useEffect(() => {
-    if (state.success) {
-      refreshUser();
+    if (!state.success) return;
+
+    const timer = window.setTimeout(() => {
+      void refreshUser();
       setIsEditing(false);
       setShowSuccess(true);
-      let timer = setTimeout(() => {
-        setShowSuccess(false);
-      }, 3000);
+    }, 0);
 
-      return () => clearInterval(timer);
-    }
-  }, [state.updatedAt]);
+    const hideTimer = window.setTimeout(() => {
+      setShowSuccess(false);
+    }, 3000);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.clearTimeout(hideTimer);
+    };
+  }, [refreshUser, state.success]);
   return (
     <div className="bg-card border border-gray-300 shadow-xl rounded-lg p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -136,7 +142,7 @@ export const ProfileMainPAge = () => {
                 </label>
                 <input
                   name="home"
-                  defaultValue={user?.address.home}
+                  defaultValue={user?.address?.home ?? ""}
                   className={`w-full px-4 py-2 border rounded-lg ${
                     state.formErrors?.address
                       ? "border-red-500"
@@ -158,7 +164,7 @@ export const ProfileMainPAge = () => {
                   </label>
                   <input
                     name="city"
-                    defaultValue={user?.address.city}
+                    defaultValue={user?.address?.city ?? ""}
                     className={`w-full px-4 py-2 border rounded-lg ${
                       state.formErrors?.city
                         ? "border-red-500"
@@ -178,7 +184,7 @@ export const ProfileMainPAge = () => {
                   </label>
                   <input
                     name="state"
-                    defaultValue={user?.address.state}
+                    defaultValue={user?.address?.state ?? ""}
                     className={`w-full px-4 py-2 border rounded-lg ${
                       state.formErrors?.state
                         ? "border-red-500"
@@ -198,7 +204,7 @@ export const ProfileMainPAge = () => {
                   </label>
                   <input
                     name="pincode"
-                    defaultValue={user?.address.pincode}
+                    defaultValue={user?.address?.pincode ?? ""}
                     className={`w-full px-4 py-2 border rounded-lg ${
                       state.formErrors?.pincode
                         ? "border-red-500"

@@ -1,13 +1,13 @@
 "use client";
 
-import { useCartStore } from "@/store/cartStore";
+import { CartItem, useCartStore } from "@/store/cartStore";
 import { useEffect } from "react";
 
 export default function CartProvider({
   initialItems,
   children,
 }: {
-  initialItems: any;
+  initialItems: CartItem[];
   children: React.ReactNode;
 }) {
   const setCart = useCartStore((s) => s.setCart);

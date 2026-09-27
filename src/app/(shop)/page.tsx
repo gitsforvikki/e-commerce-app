@@ -1,4 +1,3 @@
-import { ProductCard } from "@/components/prodocts/ProductCard";
 import { getAllProducts } from "@/services/product.services";
 import { ProductType } from "@/type";
 import { Category } from "@/ui/Category";

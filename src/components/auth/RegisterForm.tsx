@@ -2,9 +2,10 @@
 
 import { useActionState, useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff, Check, X } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { register } from "@/server-actions/auth.actions";
 import "./style.css";
+
 const initialState = {
   success: false,
   formErrors: {},
@@ -19,12 +20,12 @@ export const RegisterForm = () => {
     confirmPassword: "",
     agreeTerms: false,
   });
+  
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const [state, formAction] = useActionState(register, initialState);
+  const [state, formAction, pending] = useActionState(register, initialState);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -244,10 +245,10 @@ export const RegisterForm = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={pending}
               className="w-full bg-violet-500 text-white py-3 rounded-lg font-semibold hover:bg-violet-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
             >
-              {loading ? (
+              {pending ? (
                 <>
                   <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                   Creating account...

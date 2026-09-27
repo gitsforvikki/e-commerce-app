@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { ProductType } from "@/type";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import { addToCartAction } from "@/server-actions/cart.action";
 import { useCartStore } from "@/store/cartStore";
 
@@ -35,9 +35,11 @@ export const ProductCard = ({ _id, image, name, price }: ProductType) => {
     >
       {/* Image Container */}
       <div className="relative w-full aspect-square overflow-hidden bg-muted">
-        <img
+        <Image
           src={image}
           alt={name}
+          width={800}
+          height={800}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
 

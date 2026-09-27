@@ -1,7 +1,6 @@
 import { AccountSecurity } from "@/components/profile/AccountSecurity";
 import { Preference } from "@/components/profile/Preferences";
 import { ProfileCard } from "@/components/profile/ProfileCard";
-import ProfileForm from "@/components/profile/ProfileForm";
 import { ProfileMainPAge } from "@/components/profile/ProfileMain";
 import Link from "next/link";
 

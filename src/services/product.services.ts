@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/db";
 import { Product } from "@/models/Product";
 import { ProductType } from "@/type";
+import { Types } from "mongoose";
 
 export async function getAllProducts(): Promise<ProductType[]> {
   try {
@@ -12,7 +13,7 @@ export async function getAllProducts(): Promise<ProductType[]> {
       ...product.toObject(),
       _id: product._id.toString(),
     }));
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching products:", error);
     throw new Error("Failed to fetch products");
   }
@@ -22,6 +23,7 @@ export async function getProductById(
   productId: string,
 ): Promise<ProductType | null> {
   try {
+    if (!Types.ObjectId.isValid(productId)) return null;
     //connect to db
     await connectDB();
     //fetch product from db
@@ -33,7 +35,7 @@ export async function getProductById(
       ...product.toObject(),
       _id: product._id.toString(),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching product by ID:", error);
     throw new Error("Failed to fetch product by ID");
   }
@@ -52,7 +54,7 @@ export async function getProductsByCategory(
       ...product.toObject(),
       _id: product._id.toString(),
     }));
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching products by category:", error);
     throw new Error("Failed to fetch products by category");
   }
@@ -73,7 +75,7 @@ export async function uploadProduct(productData: Partial<ProductType>) {
         _id: newProduct._id.toString(),
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error uploading product:", error);
     return {
       success: false,

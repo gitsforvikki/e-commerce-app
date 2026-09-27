@@ -1,8 +1,9 @@
 import JWT from "jsonwebtoken";
 import { cookies } from "next/headers";
+
 const secret = process.env.JWT_SECRET;
 
-export const signToken = (payload: Object) => {
+export const signToken = (payload: object) => {
   if (!secret) {
     throw new Error("❌ Please define JWT_SECRET in .env.local");
   }
@@ -26,7 +27,7 @@ export const getLoggedInUser = async () => {
     }
     const decoded = verifyToken(token);
     return decoded;
-  } catch (err) {
+  } catch {
     return null;
   }
 };

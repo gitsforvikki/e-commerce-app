@@ -14,12 +14,11 @@ export const LoginForm = () => {
   const [state, formAction, pending] = useActionState(login, initialState);
   const { refreshUser } = useAuth();
   useEffect(() => {
-    if (state.success) {
-      refreshUser();
-      router.push("/");
-    }
-  }, [state.success]);
-  console.log(state);
+    if (!state.success) return;
+
+    void refreshUser();
+    router.push("/");
+  }, [refreshUser, router, state.success]);
   return (
     <div className="min-h-screen">
       <div className="flex items-center justify-center bg-white shadow-2xl rounded-2xl px-4 md:px-6 lg:px-10 py-8">
@@ -156,7 +155,7 @@ export const LoginForm = () => {
 
           {/* Sign Up Link */}
           <p className="text-center text-sm text-muted-foreground mt-6">
-            Don't have an account?{" "}
+            Do not have an account?{" "}
             <Link
               href="/register"
               className="text-indigo-500 hover:underline font-semibold"

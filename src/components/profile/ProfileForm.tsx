@@ -20,11 +20,10 @@ export default function ProfileForm() {
   );
 
   useEffect(() => {
-    if (state.success) {
-      refreshUser();
-      console.log("use effect called");
-    }
-  }, [state.updatedAt]);
+    if (!state.success) return;
+
+    void refreshUser();
+  }, [refreshUser, state.success]);
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -111,7 +110,7 @@ export default function ProfileForm() {
             <label className="block text-sm font-medium mb-1">Address *</label>
             <input
               name="home"
-              defaultValue={user?.address.home}
+              defaultValue={user?.address?.home ?? ""}
               className={`w-full px-4 py-2 border rounded-lg ${
                 state.formErrors?.address
                   ? "border-red-500"
@@ -131,7 +130,7 @@ export default function ProfileForm() {
               <label className="block text-sm font-medium mb-1">City *</label>
               <input
                 name="city"
-                defaultValue={user?.address.city}
+                defaultValue={user?.address?.city ?? ""}
                 className={`w-full px-4 py-2 border rounded-lg ${
                   state.formErrors?.city ? "border-red-500" : "border-slate-300"
                 }`}
@@ -147,7 +146,7 @@ export default function ProfileForm() {
               <label className="block text-sm font-medium mb-1">State *</label>
               <input
                 name="state"
-                defaultValue={user?.address.state}
+                defaultValue={user?.address?.state ?? ""}
                 className={`w-full px-4 py-2 border rounded-lg ${
                   state.formErrors?.state
                     ? "border-red-500"
@@ -167,7 +166,7 @@ export default function ProfileForm() {
               </label>
               <input
                 name="pincode"
-                defaultValue={user?.address.pincode}
+                defaultValue={user?.address?.pincode ?? ""}
                 className={`w-full px-4 py-2 border rounded-lg ${
                   state.formErrors?.pincode
                     ? "border-red-500"

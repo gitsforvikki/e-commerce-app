@@ -37,7 +37,9 @@ export const DisplayUser = () => {
         <MapPin size={20} className="text-indigo-600 font-bold shrink-0" />
         <div>
           <p className="text-sm text-muted-foreground">Address</p>
-          <p className="font-semibold text-foreground">{user?.address.city}</p>
+          <p className="font-semibold text-foreground">
+            {user?.address?.city ?? "Add your address"}
+          </p>
         </div>
       </div>
     </div>

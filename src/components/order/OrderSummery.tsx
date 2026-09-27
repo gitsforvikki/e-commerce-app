@@ -2,9 +2,13 @@ import { getLoggedInUser } from "@/lib/auth";
 import { getCartItemsFromDB } from "@/services/cart/get-cart-fromdb.service";
 import { CartItemUiType } from "@/type";
 import { routes } from "@/utils/routes";
-import { ArrowRight, Package } from "lucide-react";
+import { Package } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import {
+  calculateOrderPricing,
+  formatInr,
+} from "@/services/order/pricing.service";
 
 export const OrderSummery = async ({
   children,
@@ -13,15 +17,7 @@ export const OrderSummery = async ({
 }) => {
   const userInfo = await getLoggedInUser();
   const items: CartItemUiType[] = await getCartItemsFromDB(userInfo?.userId);
-  const grandTotal = items.reduce((acc, curr) => acc + curr.total, 0);
-  const totalTax = () => {
-    return Math.round(grandTotal / 10);
-  };
-  const shippingAmmount = grandTotal < 1000 ? 50 : 0;
-  const payableAmount =
-    shippingAmmount > 0
-      ? grandTotal + totalTax() + shippingAmmount
-      : grandTotal + totalTax();
+  const pricing = calculateOrderPricing(items);
 
   return (
     <>
@@ -33,19 +29,19 @@ export const OrderSummery = async ({
             <div className="space-y-3 text-sm">
               <div className="flex justify-between text-foreground/80">
                 <span>Subtotal</span>
-                <span>₹{grandTotal.toFixed(2)}</span>
+                <span>{formatInr(pricing.subtotalAmount)}</span>
               </div>
               <div className="flex justify-between text-foreground/80">
                 <span>Tax (10%)</span>
-                <span>₹{totalTax().toFixed(2)}</span>
+                <span>{formatInr(pricing.taxAmount)}</span>
               </div>
-              {shippingAmmount > 0 && (
+              {pricing.shippingAmount > 0 && (
                 <div className="flex justify-between text-foreground/80">
                   <span>Shipping</span>
-                  <span>₹{shippingAmmount.toFixed(2)}</span>
+                  <span>{formatInr(pricing.shippingAmount)}</span>
                 </div>
               )}
-              {shippingAmmount === 0 && grandTotal > 0 && (
+              {pricing.shippingAmount === 0 && pricing.subtotalAmount > 0 && (
                 <div className="flex justify-between text-green-600 font-medium">
                   <span>Shipping</span>
                   <span>FREE</span>
@@ -57,14 +53,14 @@ export const OrderSummery = async ({
               <div className="flex justify-between text-lg font-bold text-foreground">
                 <span>Total</span>
                 <span className="text-violet-600 hover:via-violet-700 font-semibold">
-                  ₹{payableAmount.toFixed(2)}
+                  {formatInr(pricing.totalAmount)}
                 </span>
               </div>
             </div>
 
             <div>{items.length > 0 ? children : null}</div>
 
-            {grandTotal > 0 && grandTotal < 1000 && (
+            {pricing.subtotalAmount > 0 && pricing.subtotalAmount < 100_000 && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <p className="text-sm text-blue-900">
                   🎉 Free shipping on orders over <strong>1000</strong>
@@ -82,7 +78,7 @@ export const OrderSummery = async ({
             Empty cart yet
           </h2>
           <p className="text-muted-foreground mb-6">
-            You haven't added any Item in your cart yet. Start shopping to
+            You have not added any item to your cart yet. Start shopping to
             create your first order!
           </p>
           <Link

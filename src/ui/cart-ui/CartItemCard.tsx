@@ -4,10 +4,10 @@ import Image from "next/image";
 import { updateCartAction } from "@/server-actions/cart.action";
 import { useCartStore } from "@/store/cartStore";
 import { CartItemUiType } from "@/type";
-import { Trash2, Plus, Minus, ArrowRight } from "lucide-react";
+import { Trash2, Plus, Minus } from "lucide-react";
 
 export const CartItemCard = (item: CartItemUiType) => {
-  const { _id, name, price, image, qty, total } = item;
+  const { name, image, qty } = item;
   const { updateQty, removeItem } = useCartStore();
 
   const handleIncrease = async () => {

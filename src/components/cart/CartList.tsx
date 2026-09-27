@@ -1,6 +1,5 @@
 "use client";
 
-import { CartItemUiType } from "@/type";
 import Link from "next/link";
 import { CartItemCard } from "@/ui/cart-ui/CartItemCard";
 import { useCartStore } from "@/store/cartStore";

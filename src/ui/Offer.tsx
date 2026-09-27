@@ -13,7 +13,7 @@ export const Offer = () => {
               <h2 className="text-3xl sm:text-4xl font-bold">Summer Sale</h2>
               <p className="text-lg text-white/90">
                 Get up to 50% off on selected items. Grab your favorites before
-                they're gone!
+                they are gone!
               </p>
               <button className="inline-flex items-center gap-2 bg-white text-indigo-600 font-semibold px-6 py-3 rounded-lg hover:bg-white/90 transition-colors mt-4">
                 Shop Now
