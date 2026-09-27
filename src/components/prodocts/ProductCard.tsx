@@ -1,16 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { ProductType } from "@/type";
 import { Heart, ShoppingCart } from "lucide-react";
 import { addToCartAction } from "@/server-actions/cart.action";
 import { useCartStore } from "@/store/cartStore";
+import { formatInr } from "@/services/order/pricing.service";
 
-export const ProductCard = ({ _id, image, name, price }: ProductType) => {
+export const ProductCard = ({ _id, image, name, price, category }: ProductType) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { addItem } = useCartStore();
+
+  const productUrl = `/${category ? category.toLowerCase() : "products"}/${_id}`;
 
   const handleAdd = () => {
     startTransition(async () => {
@@ -30,18 +34,19 @@ export const ProductCard = ({ _id, image, name, price }: ProductType) => {
   };
   return (
     <div
-      // href={`/product/${_id}`}
-      className="group h-full rounded-lg overflow-hidden bg-card border border-border hover:shadow-lg transition-all duration-300 hover:border-primary/30"
+      className="group h-full rounded-2xl overflow-hidden bg-white border border-slate-200 hover:shadow-xl transition-all duration-300 hover:border-violet-300 flex flex-col justify-between"
     >
       {/* Image Container */}
-      <div className="relative w-full aspect-square overflow-hidden bg-muted">
-        <Image
-          src={image}
-          alt={name}
-          width={800}
-          height={800}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-        />
+      <div className="relative w-full aspect-square overflow-hidden bg-slate-100">
+        <Link href={productUrl} className="block w-full h-full">
+          <Image
+            src={image}
+            alt={name}
+            width={800}
+            height={800}
+            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
+          />
+        </Link>
 
         {/* Discount Badge */}
         {/* {discount > 0 && (
@@ -83,38 +88,18 @@ export const ProductCard = ({ _id, image, name, price }: ProductType) => {
       {/* Content */}
       <div className="p-4 space-y-3">
         {/* Title */}
-        <h3 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors text-sm sm:text-base">
-          {name}
-        </h3>
-
-        {/* Rating */}
-        {/* <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                size={14}
-                className={
-                  i < Math.floor(rating)
-                    ? "fill-yellow-400 text-yellow-400"
-                    : "text-muted-foreground"
-                }
-              />
-            ))}
-          </div>
-          <span className="text-xs text-muted-foreground">({reviews})</span>
-        </div> */}
+        <Link href={productUrl} className="block group/link">
+          <h3 className="font-semibold text-slate-900 line-clamp-2 group-hover/link:text-violet-600 transition-colors text-sm sm:text-base">
+            {name}
+          </h3>
+        </Link>
 
         {/* Price */}
-        <div className="flex items-center gap-2 pt-2 border-t border-border">
-          <span className="text-lg font-bold text-primary">
-            ${price.toFixed(2)}
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+          <span className="text-lg font-bold text-slate-900">
+            {formatInr(Math.round(price * 100))}
           </span>
-          {/* {originalPrice && (
-            <span className="text-sm text-muted-foreground line-through">
-              ${originalPrice.toFixed(2)}
-            </span>
-          )} */}
+          <span className="text-xs text-emerald-600 font-medium">Free delivery</span>
         </div>
       </div>
     </div>
