@@ -7,6 +7,9 @@ import {
 } from "@/server-actions/placeOrder.action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
+import { routes } from "@/utils/routes";
+import { ShieldCheck, AlertCircle, Loader2, ArrowRight, Lock } from "lucide-react";
 
 type RazorpayOptions = {
   key: string;
@@ -52,8 +55,9 @@ export const PlaceOrderButton = () => {
     setError(null);
     try {
       const scriptLoaded = await loadRazorpayScript();
-      if (!scriptLoaded)
-        throw new Error("Unable to load secure payment checkout");
+      if (!scriptLoaded) {
+        throw new Error("Unable to load secure payment gateway. Please check your internet connection.");
+      }
 
       const checkout = await PlaceOrderActions();
       const Razorpay = (
@@ -61,14 +65,17 @@ export const PlaceOrderButton = () => {
           Razorpay?: new (options: RazorpayOptions) => RazorpayInstance;
         }
       ).Razorpay;
-      if (!Razorpay) throw new Error("Payment checkout is unavailable");
+
+      if (!Razorpay) {
+        throw new Error("Payment gateway is temporarily unavailable. Please retry.");
+      }
 
       const instance = new Razorpay({
         key: checkout.keyId,
         amount: checkout.amount,
         currency: checkout.currency,
         name: "ShopHub",
-        description: "Secure order payment",
+        description: "Secure Order Checkout",
         order_id: checkout.providerOrderId,
         prefill: checkout.customer,
         handler: async (response) => {
@@ -105,21 +112,60 @@ export const PlaceOrderButton = () => {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
+      {/* Primary Checkout Button */}
       <button
+        type="button"
         onClick={handlePlaceOrder}
         disabled={loading || authLoading || !user}
-        className="w-full bg-violet-600 text-white py-3 rounded-lg font-semibold hover:bg-violet-700 transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full bg-violet-600 hover:bg-violet-700 active:scale-99 text-white font-extrabold py-4 px-6 rounded-2xl shadow-xl shadow-violet-600/25 flex items-center justify-center gap-2.5 transition-all hover:scale-101 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
       >
-        {loading ? "Preparing secure checkout…" : "Pay securely"}
+        {loading ? (
+          <>
+            <Loader2 size={18} className="animate-spin" />
+            <span>Preparing Secure Payment…</span>
+          </>
+        ) : (
+          <>
+            <Lock size={16} />
+            <span>Place Order & Pay Securely</span>
+            <ArrowRight size={16} />
+          </>
+        )}
       </button>
+
+      {/* Error Message */}
       {error && (
-        <p role="alert" className="text-sm text-red-600">
-          {error}
-        </p>
+        <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 flex items-start gap-2.5 text-rose-700 dark:text-rose-300 text-xs">
+          <AlertCircle size={16} className="shrink-0 text-rose-500 mt-0.5" />
+          <div className="flex-1">
+            <p className="font-semibold">{error}</p>
+            {error.toLowerCase().includes("address") && (
+              <Link
+                href={routes.PROFILE}
+                className="mt-1.5 inline-block font-bold text-violet-600 dark:text-violet-400 underline"
+              >
+                Go to Profile to complete address →
+              </Link>
+            )}
+          </div>
+        </div>
       )}
+
+      {/* Auth Prompt if Not Signed In */}
       {!authLoading && !user && (
-        <p className="text-sm text-red-600">Sign in to place an order.</p>
+        <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 flex items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-medium">
+            <AlertCircle size={16} className="shrink-0 text-amber-600" />
+            <span>Sign in to complete order</span>
+          </div>
+          <Link
+            href={routes.LOGIN}
+            className="px-3.5 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
+          >
+            Sign In Now
+          </Link>
+        </div>
       )}
     </div>
   );
