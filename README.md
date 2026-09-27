@@ -20,6 +20,22 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Commerce configuration
+
+Set these environment variables in `.env.local` and in the deployment environment:
+
+- `MONGODB_URI` — MongoDB connection string. Transactions used by payment settlement require a replica set (including MongoDB Atlas).
+- `JWT_SECRET` — long, random secret used to sign the HTTP-only session cookie.
+- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — private Cloudinary upload credentials.
+- `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` — Razorpay API credentials. The key ID is sent to the browser; the secret must remain server-only.
+- `RAZORPAY_WEBHOOK_SECRET` — webhook signing secret configured in Razorpay.
+
+Configure a Razorpay webhook to send `payment.captured` events to `/api/payments/razorpay-webhook`. The endpoint verifies Razorpay's raw-body signature before updating the order. Do not mark orders paid from browser callbacks alone.
+
+Product creation and product-image uploads require a user whose database `role` is `ADMIN`. New registrations default to `USER`; provision the first administrator through a trusted database/admin process, never from a public registration form.
+
+Product inventory is stored in `Product.qty`; product prices are entered in rupees and order monetary snapshots are stored as integer paise with `currency: "INR"`. Before deploying these schema changes to a database with existing orders, migrate old order totals/items and resolve duplicate carts per user before enabling the unique cart index.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
