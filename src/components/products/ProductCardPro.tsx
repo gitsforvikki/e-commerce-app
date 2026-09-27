@@ -80,9 +80,9 @@ export const ProductCardPro = ({
   // ==========================================
   if (viewMode === "list") {
     return (
-      <div className="group relative bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-xl hover:border-violet-300 transition-all duration-300 flex flex-col sm:flex-row gap-5 items-stretch">
+      <div className="group relative bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-xl hover:border-violet-300 dark:hover:border-violet-500/50 transition-all duration-300 flex flex-col sm:flex-row gap-5 items-stretch">
         {/* Image Column */}
-        <div className="relative w-full sm:w-56 md:w-64 aspect-4/3 sm:aspect-square shrink-0 rounded-xl overflow-hidden bg-slate-100">
+        <div className="relative w-full sm:w-56 md:w-64 aspect-4/3 sm:aspect-square shrink-0 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800">
           <Link href={productUrl} className="block w-full h-full">
             <Image
               src={image}
@@ -95,7 +95,7 @@ export const ProductCardPro = ({
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
-            <span className="bg-white/95 backdrop-blur-md text-slate-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
+            <span className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md text-slate-800 dark:text-slate-200 text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
               {brand}
             </span>
           </div>
@@ -105,11 +105,11 @@ export const ProductCardPro = ({
             type="button"
             onClick={handleFavoriteToggle}
             aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
-            className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 backdrop-blur-md shadow-md text-slate-600 hover:text-red-500 hover:scale-110 active:scale-95 transition-all"
+            className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-md text-slate-600 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-400 hover:scale-110 active:scale-95 transition-all"
           >
             <Heart
               size={17}
-              className={isFavorite ? "fill-rose-500 text-rose-500" : "text-slate-600"}
+              className={isFavorite ? "fill-rose-500 text-rose-500" : "text-slate-600 dark:text-slate-300"}
             />
           </button>
         </div>
@@ -118,44 +118,44 @@ export const ProductCardPro = ({
         <div className="flex-1 flex flex-col justify-between min-w-0">
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-violet-600 bg-violet-50 px-2 py-0.5 rounded-md">
+              <span className="text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/60 px-2 py-0.5 rounded-md">
                 {category}
               </span>
               <div className="flex items-center gap-1 text-xs text-amber-500 font-medium">
                 <Star size={13} className="fill-amber-400 text-amber-400" />
                 <span>{ratingValue.toFixed(1)}</span>
-                <span className="text-slate-400">({reviewCount})</span>
+                <span className="text-slate-400 dark:text-slate-500">({reviewCount})</span>
               </div>
             </div>
 
             <Link href={productUrl} className="group/link block">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover/link:text-violet-600 transition-colors line-clamp-1">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover/link:text-violet-600 dark:group-hover/link:text-violet-400 transition-colors line-clamp-1">
                 {name}
               </h3>
             </Link>
 
-            <p className="mt-2 text-sm text-slate-600 line-clamp-2 leading-relaxed">
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
               {description}
             </p>
           </div>
 
           {/* Bottom Bar: Stock, Price and CTA */}
-          <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+          <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <div className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              <div className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 {formatInr(Math.round(price * 100))}
               </div>
               <div className="text-xs font-medium mt-0.5">
                 {!isAvailable ? (
-                  <span className="text-rose-600 flex items-center gap-1 font-semibold">
+                  <span className="text-rose-600 dark:text-rose-400 flex items-center gap-1 font-semibold">
                     <span className="w-1.5 h-1.5 rounded-full bg-rose-600"></span> Out of Stock
                   </span>
                 ) : isLowStock ? (
-                  <span className="text-amber-600 flex items-center gap-1 font-semibold">
+                  <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1 font-semibold">
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Only {qty} left
                   </span>
                 ) : (
-                  <span className="text-emerald-600 flex items-center gap-1 font-semibold">
+                  <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-semibold">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> In Stock ({qty})
                   </span>
                 )}
@@ -165,7 +165,7 @@ export const ProductCardPro = ({
             <div className="flex items-center gap-2">
               <Link
                 href={productUrl}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
               >
                 <Eye size={16} />
                 <span>Details</span>
@@ -179,8 +179,8 @@ export const ProductCardPro = ({
                   justAdded
                     ? "bg-emerald-600 text-white"
                     : isAvailable
-                    ? "bg-violet-600 hover:bg-violet-700 active:scale-98 text-white shadow-violet-200"
-                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                    ? "bg-violet-600 hover:bg-violet-700 active:scale-98 text-white shadow-violet-200 dark:shadow-none"
+                    : "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed"
                 }`}
               >
                 {justAdded ? (
@@ -211,9 +211,9 @@ export const ProductCardPro = ({
   // GRID VIEW LAYOUT (DEFAULT)
   // ==========================================
   return (
-    <div className="group relative bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs hover:shadow-xl hover:border-violet-300 transition-all duration-300 flex flex-col h-full">
+    <div className="group relative bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs hover:shadow-xl hover:border-violet-300 dark:hover:border-violet-500/50 transition-all duration-300 flex flex-col h-full">
       {/* Image Container */}
-      <div className="relative w-full aspect-square overflow-hidden bg-slate-100">
+      <div className="relative w-full aspect-square overflow-hidden bg-slate-100 dark:bg-slate-800">
         <Link href={productUrl} className="block w-full h-full">
           <Image
             src={image}
@@ -226,7 +226,7 @@ export const ProductCardPro = ({
 
         {/* Top Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
-          <span className="bg-white/95 backdrop-blur-md text-slate-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
+          <span className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md text-slate-800 dark:text-slate-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
             {brand}
           </span>
           {isLowStock && (
@@ -246,11 +246,11 @@ export const ProductCardPro = ({
           type="button"
           onClick={handleFavoriteToggle}
           aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
-          className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 backdrop-blur-md shadow-md text-slate-600 hover:text-rose-500 hover:scale-110 active:scale-95 transition-all"
+          className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-md text-slate-600 dark:text-slate-300 hover:text-rose-500 dark:hover:text-rose-400 hover:scale-110 active:scale-95 transition-all"
         >
           <Heart
             size={16}
-            className={isFavorite ? "fill-rose-500 text-rose-500" : "text-slate-600"}
+            className={isFavorite ? "fill-rose-500 text-rose-500" : "text-slate-600 dark:text-slate-300"}
           />
         </button>
 
@@ -264,8 +264,8 @@ export const ProductCardPro = ({
               justAdded
                 ? "bg-emerald-600 text-white"
                 : isAvailable
-                ? "bg-slate-900/90 hover:bg-violet-600 backdrop-blur-md text-white hover:shadow-violet-500/25"
-                : "bg-slate-300 text-slate-500 cursor-not-allowed"
+                ? "bg-slate-900/90 dark:bg-slate-800/90 hover:bg-violet-600 dark:hover:bg-violet-600 backdrop-blur-md text-white hover:shadow-violet-500/25"
+                : "bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed"
             }`}
           >
             {justAdded ? (
@@ -293,7 +293,7 @@ export const ProductCardPro = ({
         <div>
           {/* Category & Rating */}
           <div className="flex items-center justify-between text-xs mb-1.5">
-            <span className="font-semibold text-violet-600 uppercase tracking-wider text-[11px]">
+            <span className="font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider text-[11px]">
               {category}
             </span>
             <div className="flex items-center gap-1 text-amber-500 font-medium text-[11px]">
@@ -304,19 +304,19 @@ export const ProductCardPro = ({
 
           {/* Product Name */}
           <Link href={productUrl} className="group/link block">
-            <h3 className="font-bold text-slate-900 text-sm sm:text-base line-clamp-2 leading-snug group-hover/link:text-violet-600 transition-colors">
+            <h3 className="font-bold text-slate-900 dark:text-white text-sm sm:text-base line-clamp-2 leading-snug group-hover/link:text-violet-600 dark:group-hover/link:text-violet-400 transition-colors">
               {name}
             </h3>
           </Link>
         </div>
 
         {/* Footer: Price & Mobile CTA */}
-        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
           <div>
-            <span className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight block">
+            <span className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight block">
               {formatInr(Math.round(price * 100))}
             </span>
-            <span className="text-[11px] text-emerald-600 font-medium">
+            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
               Free delivery
             </span>
           </div>
@@ -333,7 +333,7 @@ export const ProductCardPro = ({
                   ? "bg-emerald-600 text-white"
                   : isAvailable
                   ? "bg-violet-600 hover:bg-violet-700 text-white"
-                  : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                  : "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed"
               }`}
             >
               {justAdded ? (

@@ -118,14 +118,14 @@ export const ProductFiltersSidebar = ({
   return (
     <aside className="w-full space-y-6">
       {/* Header with Title and Clear Action */}
-      <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+      <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2">
-          <SlidersHorizontal size={18} className="text-violet-600" />
-          <h2 className="text-base font-bold text-slate-900 tracking-tight">
+          <SlidersHorizontal size={18} className="text-violet-600 dark:text-violet-400" />
+          <h2 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
             Filters
           </h2>
           {activeFilterCount > 0 && (
-            <span className="bg-violet-100 text-violet-700 text-xs font-bold px-2 py-0.5 rounded-full">
+            <span className="bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 text-xs font-bold px-2 py-0.5 rounded-full">
               {activeFilterCount}
             </span>
           )}
@@ -135,7 +135,7 @@ export const ProductFiltersSidebar = ({
           <button
             type="button"
             onClick={onResetFilters}
-            className="text-xs font-semibold text-rose-600 hover:text-rose-700 hover:underline flex items-center gap-1 transition-colors"
+            className="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:underline flex items-center gap-1 transition-colors"
           >
             <RotateCcw size={12} />
             <span>Reset All</span>
@@ -144,17 +144,17 @@ export const ProductFiltersSidebar = ({
       </div>
 
       {/* 1. Category Section */}
-      <div className="border-b border-slate-100 pb-5">
+      <div className="border-b border-slate-100 dark:border-slate-800 pb-5">
         <button
           type="button"
           onClick={() => toggleSection("category")}
-          className="w-full flex items-center justify-between text-sm font-bold text-slate-900 mb-3 group"
+          className="w-full flex items-center justify-between text-sm font-bold text-slate-900 dark:text-white mb-3 group"
         >
           <span>Category</span>
           {openSections.category ? (
-            <ChevronUp size={16} className="text-slate-400 group-hover:text-slate-600" />
+            <ChevronUp size={16} className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" />
           ) : (
-            <ChevronDown size={16} className="text-slate-400 group-hover:text-slate-600" />
+            <ChevronDown size={16} className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" />
           )}
         </button>
 
@@ -170,7 +170,7 @@ export const ProductFiltersSidebar = ({
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm transition-all text-left ${
                     isSelected
                       ? "bg-violet-600 text-white font-semibold shadow-xs"
-                      : "text-slate-700 hover:bg-slate-100"
+                      : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                   }`}
                 >
                   <span className="capitalize">
@@ -180,7 +180,7 @@ export const ProductFiltersSidebar = ({
                     className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                       isSelected
                         ? "bg-white/20 text-white"
-                        : "bg-slate-100 text-slate-500"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
                     }`}
                   >
                     {cat.count}
@@ -193,17 +193,17 @@ export const ProductFiltersSidebar = ({
       </div>
 
       {/* 2. Price Range Section */}
-      <div className="border-b border-slate-100 pb-5">
+      <div className="border-b border-slate-100 dark:border-slate-800 pb-5">
         <button
           type="button"
           onClick={() => toggleSection("price")}
-          className="w-full flex items-center justify-between text-sm font-bold text-slate-900 mb-3 group"
+          className="w-full flex items-center justify-between text-sm font-bold text-slate-900 dark:text-white mb-3 group"
         >
           <span>Price Range</span>
           {openSections.price ? (
-            <ChevronUp size={16} className="text-slate-400 group-hover:text-slate-600" />
+            <ChevronUp size={16} className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" />
           ) : (
-            <ChevronDown size={16} className="text-slate-400 group-hover:text-slate-600" />
+            <ChevronDown size={16} className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" />
           )}
         </button>
 
@@ -225,8 +225,8 @@ export const ProductFiltersSidebar = ({
                     onClick={() => handlePricePreset(preset.min, preset.max)}
                     className={`text-xs px-2.5 py-1.5 rounded-lg border font-medium transition-all ${
                       isActive
-                        ? "bg-violet-50 border-violet-500 text-violet-700 font-semibold"
-                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                        ? "bg-violet-50 dark:bg-violet-950/60 border-violet-500 text-violet-700 dark:text-violet-300 font-semibold"
+                        : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750"
                     }`}
                   >
                     {preset.label}
@@ -237,9 +237,9 @@ export const ProductFiltersSidebar = ({
 
             {/* Range Slider for Scrubbing Max Price */}
             <div>
-              <div className="flex justify-between text-xs text-slate-500 mb-1">
+              <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
                 <span>{formatInr(minPossiblePrice * 100)}</span>
-                <span className="font-semibold text-violet-700">
+                <span className="font-semibold text-violet-700 dark:text-violet-400">
                   Up to {formatInr(filters.priceRange[1] * 100)}
                 </span>
                 <span>{formatInr(maxPossiblePrice * 100)}</span>
@@ -251,14 +251,14 @@ export const ProductFiltersSidebar = ({
                 step={50}
                 value={filters.priceRange[1]}
                 onChange={(e) => handleMaxPriceChange(Number(e.target.value))}
-                className="w-full accent-violet-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
+                className="w-full accent-violet-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
               />
             </div>
 
             {/* Min and Max Number Inputs */}
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[11px] font-medium text-slate-500 block mb-1">
+                <label className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mb-1">
                   Min (₹)
                 </label>
                 <input
@@ -266,11 +266,11 @@ export const ProductFiltersSidebar = ({
                   min={0}
                   value={filters.priceRange[0]}
                   onChange={(e) => handleMinPriceChange(Number(e.target.value))}
-                  className="w-full px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:bg-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition"
+                  className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-850 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition"
                 />
               </div>
               <div>
-                <label className="text-[11px] font-medium text-slate-500 block mb-1">
+                <label className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mb-1">
                   Max (₹)
                 </label>
                 <input
@@ -278,7 +278,7 @@ export const ProductFiltersSidebar = ({
                   min={filters.priceRange[0]}
                   value={filters.priceRange[1]}
                   onChange={(e) => handleMaxPriceChange(Number(e.target.value))}
-                  className="w-full px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:bg-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition"
+                  className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:bg-white dark:focus:bg-slate-850 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition"
                 />
               </div>
             </div>
@@ -287,17 +287,17 @@ export const ProductFiltersSidebar = ({
       </div>
 
       {/* 3. Brands Section */}
-      <div className="border-b border-slate-100 pb-5">
+      <div className="border-b border-slate-100 dark:border-slate-800 pb-5">
         <button
           type="button"
           onClick={() => toggleSection("brand")}
-          className="w-full flex items-center justify-between text-sm font-bold text-slate-900 mb-3 group"
+          className="w-full flex items-center justify-between text-sm font-bold text-slate-900 dark:text-white mb-3 group"
         >
           <span>Brands</span>
           {openSections.brand ? (
-            <ChevronUp size={16} className="text-slate-400 group-hover:text-slate-600" />
+            <ChevronUp size={16} className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" />
           ) : (
-            <ChevronDown size={16} className="text-slate-400 group-hover:text-slate-600" />
+            <ChevronDown size={16} className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" />
           )}
         </button>
 
@@ -315,7 +315,7 @@ export const ProductFiltersSidebar = ({
                   placeholder="Filter brands..."
                   value={brandSearch}
                   onChange={(e) => setBrandSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:bg-white focus:border-violet-500 outline-none transition"
+                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-slate-850 focus:border-violet-500 outline-none transition"
                 />
               </div>
             )}
@@ -330,23 +330,23 @@ export const ProductFiltersSidebar = ({
                   return (
                     <label
                       key={brand.name}
-                      className="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer group transition-colors"
+                      className="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer group transition-colors"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div
                           className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
                             isChecked
                               ? "bg-violet-600 border-violet-600 text-white"
-                              : "border-slate-300 bg-white group-hover:border-slate-400"
+                              : "border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 group-hover:border-slate-400"
                           }`}
                         >
                           {isChecked && <Check size={12} className="stroke-[3]" />}
                         </div>
-                        <span className="text-xs font-medium text-slate-700 group-hover:text-slate-900 truncate">
+                        <span className="text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white truncate">
                           {brand.name}
                         </span>
                       </div>
-                      <span className="text-[11px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md">
                         {brand.count}
                       </span>
                     </label>
@@ -360,12 +360,12 @@ export const ProductFiltersSidebar = ({
 
       {/* 4. Availability / Stock Section */}
       <div className="pb-2">
-        <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80 cursor-pointer hover:bg-slate-100/80 transition-colors">
+        <label className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-750 cursor-pointer hover:bg-slate-100/80 dark:hover:bg-slate-800 transition-colors">
           <div>
-            <span className="text-sm font-semibold text-slate-800 block">
+            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 block">
               In Stock Only
             </span>
-            <span className="text-[11px] text-slate-500 block">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 block">
               Hide out of stock items
             </span>
           </div>
@@ -386,7 +386,7 @@ export const ProductFiltersSidebar = ({
 
       {/* Mobile Drawer Done Button */}
       {isMobileDrawer && (
-        <div className="pt-4 sticky bottom-0 bg-white border-t border-slate-100">
+        <div className="pt-4 sticky bottom-0 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
           <button
             type="button"
             onClick={onCloseMobileDrawer}

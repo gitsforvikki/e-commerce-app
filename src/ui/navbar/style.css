@@ -1,9 +1,9 @@
 @reference "tailwindcss";
 
 .navbar-links {
-  @apply hover:text-indigo-500 transition-colors font-medium;
+  @apply text-slate-700 dark:text-slate-200 hover:text-violet-600 dark:hover:text-violet-400 transition-colors font-medium;
 }
 
 .navbar-links-mobile {
-  @apply block px-4 py-2  hover:bg-indigo-500 rounded-lg transition-colors;
+  @apply block px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 rounded-lg transition-colors font-medium;
 }

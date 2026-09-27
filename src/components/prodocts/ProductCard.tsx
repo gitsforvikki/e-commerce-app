@@ -34,10 +34,10 @@ export const ProductCard = ({ _id, image, name, price, category }: ProductType) 
   };
   return (
     <div
-      className="group h-full rounded-2xl overflow-hidden bg-white border border-slate-200 hover:shadow-xl transition-all duration-300 hover:border-violet-300 flex flex-col justify-between"
+      className="group h-full rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:shadow-xl transition-all duration-300 hover:border-violet-300 dark:hover:border-violet-500/50 flex flex-col justify-between"
     >
       {/* Image Container */}
-      <div className="relative w-full aspect-square overflow-hidden bg-slate-100">
+      <div className="relative w-full aspect-square overflow-hidden bg-slate-100 dark:bg-slate-800">
         <Link href={productUrl} className="block w-full h-full">
           <Image
             src={image}
@@ -48,27 +48,20 @@ export const ProductCard = ({ _id, image, name, price, category }: ProductType) 
           />
         </Link>
 
-        {/* Discount Badge */}
-        {/* {discount > 0 && (
-          <div className="absolute top-3 right-3 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-bold">
-            -{discount}%
-          </div>
-        )} */}
-
         {/* Favorite Button */}
         <button
           onClick={(e) => {
             e.preventDefault();
             setIsFavorite(!isFavorite);
           }}
-          className="absolute top-3 left-3 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform hover:bg-primary/10"
+          className="absolute top-3 left-3 bg-white/90 dark:bg-slate-800/90 rounded-full p-2 shadow-md hover:scale-110 transition-transform"
         >
           <Heart
             size={18}
             className={
               isFavorite
-                ? "fill-destructive text-destructive"
-                : "text-foreground"
+                ? "fill-rose-500 text-rose-500"
+                : "text-slate-600 dark:text-slate-300"
             }
           />
         </button>
@@ -89,17 +82,17 @@ export const ProductCard = ({ _id, image, name, price, category }: ProductType) 
       <div className="p-4 space-y-3">
         {/* Title */}
         <Link href={productUrl} className="block group/link">
-          <h3 className="font-semibold text-slate-900 line-clamp-2 group-hover/link:text-violet-600 transition-colors text-sm sm:text-base">
+          <h3 className="font-semibold text-slate-900 dark:text-white line-clamp-2 group-hover/link:text-violet-600 dark:group-hover/link:text-violet-400 transition-colors text-sm sm:text-base">
             {name}
           </h3>
         </Link>
 
         {/* Price */}
-        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-          <span className="text-lg font-bold text-slate-900">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+          <span className="text-lg font-bold text-slate-900 dark:text-white">
             {formatInr(Math.round(price * 100))}
           </span>
-          <span className="text-xs text-emerald-600 font-medium">Free delivery</span>
+          <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Free delivery</span>
         </div>
       </div>
     </div>
