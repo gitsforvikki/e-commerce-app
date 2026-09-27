@@ -11,21 +11,33 @@ const initialState: ProductFormState = {
 export const UploadProductForm = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
   const [state, action] = useActionState(addProduct, initialState);
   async function handleImageUpload(file: File) {
     setLoading(true);
+    setUploadError("");
 
-    const formData = new FormData();
-    formData.append("file", file);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
 
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-    setImageUrl(data.url);
-    setLoading(false);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok || typeof data.url !== "string") {
+        throw new Error(data.message || "Image upload failed");
+      }
+      setImageUrl(data.url);
+    } catch (error) {
+      setImageUrl("");
+      setUploadError(
+        error instanceof Error ? error.message : "Image upload failed",
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -105,17 +117,6 @@ export const UploadProductForm = () => {
           <p className="text-red-500">{state.errors.usage[0]}</p>
         )}
 
-        {/* Product stock */}
-        <input
-          name="stock"
-          type="number"
-          placeholder="Product stock"
-          className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:text-white"
-        />
-        {state.errors?.stock && (
-          <p className="text-red-500">{state.errors.stock[0]}</p>
-        )}
-
         {/* File Upload */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -124,7 +125,10 @@ export const UploadProductForm = () => {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleImageUpload(e.target.files![0])}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void handleImageUpload(file);
+            }}
             className="block w-full cursor-pointer rounded-lg border border-gray-300 text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-white hover:file:bg-blue-700 dark:border-gray-700 dark:text-gray-400"
           />
         </div>
@@ -133,6 +137,11 @@ export const UploadProductForm = () => {
         {loading && (
           <p className="text-sm text-blue-600 animate-pulse">
             Uploading image...
+          </p>
+        )}
+        {uploadError && (
+          <p role="alert" className="text-sm text-red-600">
+            {uploadError}
           </p>
         )}
 
@@ -155,7 +164,7 @@ export const UploadProductForm = () => {
         {/* Submit */}
         <button
           type="submit"
-          disabled={!imageUrl}
+          disabled={!imageUrl || loading || Boolean(uploadError)}
           className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400 dark:disabled:bg-gray-600"
         >
           Create Product
