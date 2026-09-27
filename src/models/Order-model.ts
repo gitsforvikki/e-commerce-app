@@ -14,7 +14,8 @@ export interface ShippingAddress {
   city: string;
   state: string;
   pincode: string;
-  addressLine: string;
+  addressLine?: string;
+  home?: string;
 }
 
 export interface PaymentInfo {
