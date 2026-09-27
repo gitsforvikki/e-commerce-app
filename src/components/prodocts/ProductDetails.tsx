@@ -1,147 +1,90 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { useState, useTransition } from "react";
 import { ProductType } from "@/type";
-
-import {
-  Star,
-  Heart,
-  ShoppingCart,
-  Truck,
-  RotateCcw,
-  Shield,
-  ChevronDown,
-} from "lucide-react";
+import { addToCartAction } from "@/server-actions/cart.action";
+import { useCartStore } from "@/store/cartStore";
+import { formatInr } from "@/services/order/pricing.service";
+import { Heart, ShoppingCart, Truck, Shield, ChevronDown } from "lucide-react";
 
 export default function ProductDetails({ product }: { product: ProductType }) {
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(0);
   const [expandedSection, setExpandedSection] = useState<string | null>(
     "description",
   );
-
-  const fakeOriginalPrice = 9999.99; // For demonstration of discount badge
-  const fakeRating = 4.3; // For demonstration of rating stars
-  const fakeReviews = 123; // For demonstration of reviews count
-  const fakeSKU = "SKU12345"; // For demonstration of SKU
-  const fakeFeatures = [
-    "Classic and timeless design",
-    "High-quality polarized lenses",
-    "Durable and lightweight frame",
-    "Provides 100% UV protection",
-  ];
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const { addItem } = useCartStore();
+  const available = Number.isInteger(product.qty) && product.qty > 0;
 
   const handleAddToCart = () => {
-    // Mock add to cart
-    alert(`Added ${quantity} item(s) to cart`);
+    setError(null);
+    startTransition(async () => {
+      try {
+        await addToCartAction(product._id, quantity);
+        addItem({
+          _id: product._id,
+          name: product.name,
+          image: product.image,
+          price: product.price,
+          qty: quantity,
+          total: product.price * quantity,
+        });
+      } catch (cause) {
+        setError(
+          cause instanceof Error
+            ? cause.message
+            : "Unable to add this item to your cart",
+        );
+      }
+    });
   };
 
-  const images = [
-    product.image,
-    "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=800&fit=crop",
-    "https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=800&h=800&fit=crop",
-  ];
-
-  const discount = Math.round(
-    ((fakeOriginalPrice - product.price) / fakeOriginalPrice) * 100,
-  );
+  const toggleSection = (section: string) => {
+    setExpandedSection((current) => (current === section ? null : section));
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Images Section */}
-          <div className="space-y-4">
-            {/* Main Image */}
-            <div className="relative bg-muted rounded-lg overflow-hidden aspect-square">
-              <img
-                src={images[selectedImage]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-              {discount > 0 && (
-                <div className="absolute top-4 left-4 bg-red-500 text-white px-4 py-2 rounded-full font-bold text-lg">
-                  -{discount}%
-                </div>
-              )}
-            </div>
-
-            {/* Thumbnail Images */}
-            <div className="grid grid-cols-3 gap-3">
-              {images.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`relative rounded-lg overflow-hidden aspect-square border-2 transition-all ${
-                    selectedImage === idx
-                      ? "border-primary"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                >
-                  <img
-                    src={img}
-                    alt={`View ${idx + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="relative aspect-square overflow-hidden rounded-lg bg-muted">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
           </div>
 
-          {/* Product Info Section */}
           <div className="space-y-6">
-            {/* Title and Rating */}
-            <div className="space-y-4">
-              <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
+            <div className="space-y-3">
+              <p className="text-sm font-semibold uppercase tracking-wide text-violet-700">
+                {product.brand}
+              </p>
+              <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
                 {product.name}
               </h1>
-
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        size={18}
-                        className={
-                          i < Math.floor(fakeRating)
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-muted-foreground"
-                        }
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm font-medium text-foreground">
-                    {fakeRating} ({fakeReviews} reviews)
-                  </span>
-                </div>
-                {product.qty && (
-                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                    In Stock
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Price */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-4">
-                <span className="text-4xl font-bold text-violet-600">
-                  ${product.price}
-                </span>
-                <span className="text-xl text-muted-foreground line-through">
-                  ${fakeOriginalPrice}
-                </span>
-              </div>
-              <p className="text-sm text-green-600 font-medium">
-                Save ${(fakeOriginalPrice - product.price).toFixed(2)} (
-                {discount}% off)
+              <p
+                className={
+                  available
+                    ? "text-sm font-medium text-green-700"
+                    : "text-sm font-medium text-red-700"
+                }
+              >
+                {available ? `${product.qty} available` : "Out of stock"}
               </p>
             </div>
 
-            {/* SKU and Category */}
-            <div className="grid grid-cols-2 gap-4 p-4 bg-slate-200 rounded-lg text-sm">
+            <p className="text-3xl font-bold text-violet-700">
+              {formatInr(Math.round(product.price * 100))}
+            </p>
+
+            <div className="grid grid-cols-2 gap-4 rounded-lg bg-slate-100 p-4 text-sm">
               <div>
                 <p className="text-muted-foreground">Category</p>
                 <p className="font-semibold text-foreground">
@@ -149,184 +92,129 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                 </p>
               </div>
               <div>
-                <p className="text-muted-foreground">SKU</p>
-                <p className="font-semibold text-foreground">{fakeSKU}</p>
+                <p className="text-muted-foreground">Brand</p>
+                <p className="font-semibold text-foreground">{product.brand}</p>
               </div>
             </div>
 
-            {/* Quantity and Actions */}
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                {/* Quantity Selector */}
-                <div className="flex items-center border border-slate-300 rounded-lg">
+                <div className="flex items-center rounded-lg border border-slate-300">
                   <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-4 py-2 hover:bg-slate-300 transition-colors"
+                    type="button"
+                    aria-label="Decrease quantity"
+                    disabled={quantity <= 1}
+                    onClick={() =>
+                      setQuantity((value) => Math.max(1, value - 1))
+                    }
+                    className="px-4 py-2 disabled:opacity-40"
                   >
                     −
                   </button>
-                  <span className="px-4 py-2 font-semibold text-gray-800">
+                  <span className="min-w-10 px-2 py-2 text-center font-semibold">
                     {quantity}
                   </span>
                   <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="px-4 py-2 hover:bg-slate-300 transition-colors"
+                    type="button"
+                    aria-label="Increase quantity"
+                    disabled={
+                      !available || quantity >= product.qty || quantity >= 99
+                    }
+                    onClick={() =>
+                      setQuantity((value) =>
+                        Math.min(product.qty, 99, value + 1),
+                      )
+                    }
+                    className="px-4 py-2 disabled:opacity-40"
                   >
                     +
                   </button>
                 </div>
-
-                {/* Favorite Button */}
                 <button
-                  onClick={() => setIsFavorite(!isFavorite)}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors font-medium"
+                  type="button"
+                  onClick={() => setIsFavorite((value) => !value)}
+                  aria-pressed={isFavorite}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-300 px-4 py-3 font-medium hover:bg-slate-100"
                 >
                   <Heart
                     size={20}
                     className={isFavorite ? "fill-rose-500 text-rose-500" : ""}
                   />
-                  {isFavorite ? "Favorited" : "Add to Wishlist"}
+                  {isFavorite ? "Saved" : "Save for later"}
                 </button>
               </div>
-
-              {/* Add to Cart Button */}
               <button
+                type="button"
                 onClick={handleAddToCart}
-                className="w-full bg-violet-500 py-3 rounded-lg font-semibold hover:bg-violet-600 transition-colors flex items-center justify-center gap-2 text-lg"
+                disabled={!available || isPending}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 py-3 text-lg font-semibold text-white hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <ShoppingCart size={24} />
-                Add to Cart
+                <ShoppingCart size={22} />
+                {isPending
+                  ? "Adding…"
+                  : available
+                    ? "Add to cart"
+                    : "Out of stock"}
               </button>
+              {error && (
+                <p role="alert" className="text-sm text-red-600">
+                  {error}
+                </p>
+              )}
             </div>
 
-            {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-4 p-4 bg-slate-200 rounded-lg">
-              <div className="text-center space-y-2">
-                <Truck size={24} className="mx-auto text-primary" />
-                <p className="text-xs text-muted-foreground font-medium">
-                  Free Shipping
-                </p>
+            <div className="grid grid-cols-2 gap-4 rounded-lg bg-slate-100 p-4">
+              <div className="flex items-center gap-3">
+                <Truck size={22} className="text-violet-700" />
+                <span className="text-sm">Shipping calculated at checkout</span>
               </div>
-              <div className="text-center space-y-2">
-                <RotateCcw size={24} className="mx-auto text-primary" />
-                <p className="text-xs text-muted-foreground font-medium">
-                  Easy Returns
-                </p>
-              </div>
-              <div className="text-center space-y-2">
-                <Shield size={24} className="mx-auto text-primary" />
-                <p className="text-xs text-muted-foreground font-medium">
-                  Secure Payment
-                </p>
+              <div className="flex items-center gap-3">
+                <Shield size={22} className="text-violet-700" />
+                <span className="text-sm">Secure payment checkout</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Accordion Sections */}
-        <div className="mt-12 space-y-2 max-w-4xl">
-          {/* Description */}
-          <div className="border border-border rounded-lg overflow-hidden">
+        <div className="mt-12 max-w-4xl space-y-2">
+          <section className="overflow-hidden rounded-lg border border-border">
             <button
-              onClick={() =>
-                setExpandedSection(
-                  expandedSection === "description" ? null : "description",
-                )
-              }
-              className="w-full flex items-center justify-between p-4 hover:bg-muted transition-colors"
+              type="button"
+              onClick={() => toggleSection("description")}
+              className="flex w-full items-center justify-between p-4 text-left hover:bg-muted"
             >
-              <h3 className="font-semibold text-foreground">Description</h3>
+              <h2 className="font-semibold">Description</h2>
               <ChevronDown
                 size={20}
-                className={`transition-transform ${
+                className={
                   expandedSection === "description" ? "rotate-180" : ""
-                }`}
+                }
               />
             </button>
             {expandedSection === "description" && (
-              <div className="px-4 pb-4 border-t border-border">
-                <p className="text-foreground">{product.description}</p>
-              </div>
+              <p className="border-t border-border px-4 py-4 text-foreground">
+                {product.description || "No description provided."}
+              </p>
             )}
-          </div>
-
-          {/* Features */}
-          <div className="border border-border rounded-lg overflow-hidden">
+          </section>
+          <section className="overflow-hidden rounded-lg border border-border">
             <button
-              onClick={() =>
-                setExpandedSection(
-                  expandedSection === "features" ? null : "features",
-                )
-              }
-              className="w-full flex items-center justify-between p-4 hover:bg-muted transition-colors"
+              type="button"
+              onClick={() => toggleSection("usage")}
+              className="flex w-full items-center justify-between p-4 text-left hover:bg-muted"
             >
-              <h3 className="font-semibold text-foreground">Features</h3>
+              <h2 className="font-semibold">Usage information</h2>
               <ChevronDown
                 size={20}
-                className={`transition-transform ${expandedSection === "features" ? "rotate-180" : ""}`}
+                className={expandedSection === "usage" ? "rotate-180" : ""}
               />
             </button>
-            {expandedSection === "features" && (
-              <div className="px-4 pb-4 border-t border-border">
-                <ul className="space-y-2">
-                  {fakeFeatures.map((feature: string, idx: number) => (
-                    <li
-                      key={idx}
-                      className="flex items-center gap-3 text-foreground"
-                    >
-                      <span className="w-2 h-2 bg-indigo-600 rounded-full" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {expandedSection === "usage" && (
+              <p className="border-t border-border px-4 py-4 text-foreground">
+                {product.usage || "No usage information provided."}
+              </p>
             )}
-          </div>
-
-          {/* Shipping Info */}
-          <div className="border border-border rounded-lg overflow-hidden">
-            <button
-              onClick={() =>
-                setExpandedSection(
-                  expandedSection === "shipping" ? null : "shipping",
-                )
-              }
-              className="w-full flex items-center justify-between p-4 hover:bg-muted transition-colors"
-            >
-              <h3 className="font-semibold text-foreground">
-                Shipping & Returns
-              </h3>
-              <ChevronDown
-                size={20}
-                className={`transition-transform ${expandedSection === "shipping" ? "rotate-180" : ""}`}
-              />
-            </button>
-            {expandedSection === "shipping" && (
-              <div className="px-4 pb-4 border-t border-border space-y-3 text-foreground text-sm">
-                <div>
-                  <p className="font-semibold mb-1">Shipping</p>
-                  <p className="text-muted-foreground">
-                    Free shipping on orders over $50. Delivery within 5-7
-                    business days.
-                  </p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-1">Returns</p>
-                  <p className="text-muted-foreground">
-                    30-day money-back guarantee. Free returns on all orders.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* You Might Also Like */}
-        <div className="mt-16 pt-8 border-t border-border">
-          <h2 className="text-2xl font-bold text-foreground mb-6">
-            You Might Also Like
-          </h2>
-          <p className="text-muted-foreground">More products coming soon...</p>
+          </section>
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import { getProductById } from "@/services/product.services";
-import { ProductType } from "@/type";
 import ProductDetails from "@/components/prodocts/ProductDetails";
 import ProductDetailsSkeleton from "@/simmerUi/productDetailsSimmer";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -10,7 +10,8 @@ export async function generateMetadata({
   params: Promise<{ category: string; slug: string }>;
 }) {
   const { slug } = await params;
-  const product = (await getProductById(slug)) as ProductType;
+  const product = await getProductById(slug);
+  if (!product) return { title: "Product not found" };
 
   return {
     title: product.name,
@@ -24,7 +25,8 @@ export default async function ProductDetailPage({
   params: Promise<{ category: string; slug: string }>;
 }) {
   const { slug } = await params;
-  const product = (await getProductById(slug)) as ProductType;
+  const product = await getProductById(slug);
+  if (!product) notFound();
 
   return (
     <>
