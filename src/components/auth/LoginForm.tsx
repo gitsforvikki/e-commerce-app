@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock, AlertCircle, ArrowRight, ShieldCheck } from "lucide-react";
 import { login } from "@/server-actions/auth.actions";
 import { useAuth } from "@/context/auth-context";
@@ -12,6 +12,7 @@ const initialState = { success: false, error: "" };
 
 export const LoginForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [state, formAction, pending] = useActionState(login, initialState);
   const { refreshUser } = useAuth();
@@ -19,8 +20,10 @@ export const LoginForm = () => {
   useEffect(() => {
     if (!state.success) return;
     void refreshUser();
-    router.push(routes.HOME);
-  }, [refreshUser, router, state.success]);
+    // Redirect to the originally requested page, or home as a fallback
+    const callbackUrl = searchParams.get("callbackUrl") || routes.HOME;
+    router.push(callbackUrl);
+  }, [refreshUser, router, searchParams, state.success]);
 
   return (
     <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl shadow-xl dark:shadow-2xl dark:shadow-violet-950/20 p-6 sm:p-10 transition-all relative z-10">

@@ -19,6 +19,7 @@ export const metadata = {
 };
 
 export default async function OrdersPage() {
+  // Proxy guarantees authentication — this redirect is a defensive fallback
   const user = await getCurrentUserData();
   if (!user) redirect(routes.LOGIN);
 
