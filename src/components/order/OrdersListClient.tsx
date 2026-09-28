@@ -75,10 +75,19 @@ export function OrdersListClient({ initialOrders }: OrdersListClientProps) {
     const totalOrders = initialOrders.length;
     const completed = initialOrders.filter((o) => o.status === "DELIVERED").length;
     const inProgress = initialOrders.filter(
-      (o) => o.status === "CREATED" || o.status === "PAID" || o.status === "PROCESSING" || o.status === "SHIPPED",
+      (o) =>
+        o.status === "CREATED" ||
+        o.status === "CONFIRMED" ||
+        o.status === "PAID" ||
+        o.status === "PROCESSING" ||
+        o.status === "SHIPPED",
     ).length;
     const totalSpentPaise = initialOrders
-      .filter((o) => o.status !== "CANCELLED" && o.payment.status === "SUCCESS")
+      .filter(
+        (o) =>
+          o.status !== "CANCELLED" &&
+          (o.payment.status === "SUCCESS" || o.payment.status === "PAID"),
+      )
       .reduce((sum, o) => sum + o.totalAmount, 0);
 
     return { totalOrders, completed, inProgress, totalSpentPaise };
@@ -91,7 +100,9 @@ export function OrdersListClient({ initialOrders }: OrdersListClientProps) {
       if (statusFilter === "COMPLETED" && order.status !== "DELIVERED") return false;
       if (
         statusFilter === "IN_PROGRESS" &&
-        !["CREATED", "PAID", "PROCESSING", "SHIPPED"].includes(order.status)
+        !["CREATED", "CONFIRMED", "PAID", "PROCESSING", "SHIPPED"].includes(
+          order.status,
+        )
       ) {
         return false;
       }
@@ -149,6 +160,14 @@ export function OrdersListClient({ initialOrders }: OrdersListClientProps) {
             "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-800/60",
           step: 2,
         };
+      case "CONFIRMED":
+        return {
+          label: "Confirmed",
+          icon: CheckCircle2,
+          badgeClass:
+            "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60",
+          step: 2,
+        };
       case "CANCELLED":
         return {
           label: "Cancelled",
@@ -172,6 +191,7 @@ export function OrdersListClient({ initialOrders }: OrdersListClientProps) {
   const getPaymentStatusConfig = (status: string) => {
     switch (status) {
       case "SUCCESS":
+      case "PAID":
         return {
           label: "Payment Verified",
           icon: ShieldCheck,

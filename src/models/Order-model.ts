@@ -21,10 +21,13 @@ export interface ShippingAddress {
 export interface PaymentInfo {
   paymentId?: string;
   providerOrderId?: string;
+  cashfreeOrderId?: string;
+  cashfreePaymentId?: string;
+  paidAt?: Date;
   refundId?: string;
   refundStatus?: "PENDING" | "PROCESSED" | "FAILED";
   method?: string;
-  status: "PENDING" | "SUCCESS" | "FAILED";
+  status: "PENDING" | "SUCCESS" | "PAID" | "FAILED";
 }
 
 export interface Order {
@@ -39,6 +42,7 @@ export interface Order {
   payment: PaymentInfo;
   status:
     | "CREATED"
+    | "CONFIRMED"
     | "PAID"
     | "PROCESSING"
     | "SHIPPED"
@@ -92,15 +96,19 @@ const orderSchema = new mongoose.Schema(
     },
 
     payment: {
-      paymentId: String,
-      providerOrderId: String,
+      paymentId: { type: String, index: true },
+      providerOrderId: { type: String, index: true },
+      cashfreeOrderId: { type: String, index: true },
+      cashfreePaymentId: { type: String, index: true },
+      paidAt: { type: Date },
       refundId: String,
       refundStatus: { type: String, enum: ["PENDING", "PROCESSED", "FAILED"] },
-      method: String,
+      method: { type: String, default: "Cashfree" },
       status: {
         type: String,
-        enum: ["PENDING", "SUCCESS", "FAILED"],
+        enum: ["PENDING", "SUCCESS", "PAID", "FAILED"],
         default: "PENDING",
+        index: true,
       },
     },
 
@@ -108,6 +116,7 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: [
         "CREATED",
+        "CONFIRMED",
         "PAID",
         "PROCESSING",
         "SHIPPED",

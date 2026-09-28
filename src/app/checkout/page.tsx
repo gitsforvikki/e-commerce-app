@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { OrderSummery } from "@/components/order/OrderSummery";
 import { DisplayUser } from "@/components/profile/DisplayUser";
-import { PlaceOrderButton } from "@/ui/PlaceOrderButton";
+import { CashfreeCheckoutButton } from "@/components/payment/CashfreeCheckoutButton";
 import { routes } from "@/utils/routes";
 import {
   Edit2,
@@ -167,7 +167,7 @@ export default async function CheckoutPage() {
                     Payment Gateway
                   </h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Encrypted multi-option payments powered by Razorpay
+                    Encrypted multi-option payments powered by Cashfree (Sandbox Test Mode)
                   </p>
                 </div>
               </div>
@@ -180,10 +180,10 @@ export default async function CheckoutPage() {
                     </div>
                     <div>
                       <span className="font-bold text-sm text-slate-900 dark:text-white block">
-                        Instant UPI & Cards Checkout
+                        Cashfree Sandbox Gateway
                       </span>
                       <span className="text-xs text-slate-500 dark:text-slate-400">
-                        GPay, PhonePe, Paytm, RuPay, Visa, Mastercard, Net Banking
+                        Test UPI, Cards, Net Banking & Wallets (No Real Money Charged)
                       </span>
                     </div>
                   </div>
@@ -191,11 +191,11 @@ export default async function CheckoutPage() {
                 </div>
 
                 <div className="pt-2 border-t border-slate-200/80 dark:border-slate-700/80 flex flex-wrap gap-2 text-[10px] font-bold text-slate-600 dark:text-slate-300">
-                  <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">UPI Instant</span>
-                  <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Google Pay</span>
-                  <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">PhonePe</span>
-                  <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">RuPay / Cards</span>
+                  <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Cashfree Sandbox</span>
+                  <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Test UPI</span>
+                  <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Test Cards</span>
                   <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Net Banking</span>
+                  <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Zero Real Charges</span>
                 </div>
               </div>
             </div>
@@ -264,7 +264,7 @@ export default async function CheckoutPage() {
           {/* ======================================================== */}
           <div className="lg:col-span-4">
             <OrderSummery>
-              <PlaceOrderButton />
+              <CashfreeCheckoutButton />
             </OrderSummery>
           </div>
         </div>

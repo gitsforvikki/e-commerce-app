@@ -10,6 +10,8 @@ import {
   type SerializedOrder,
 } from "@/components/order/OrdersListClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "My Orders & Order History | ShopHub",
   description:
@@ -61,8 +63,8 @@ export default async function OrdersPage() {
         : new Date().toISOString(),
       payment: {
         status: order.payment?.status || "PENDING",
-        method: order.payment?.method || "Razorpay",
-        paymentId: order.payment?.paymentId,
+        method: order.payment?.method || "Cashfree",
+        paymentId: order.payment?.paymentId || order.payment?.cashfreePaymentId,
       },
       shippingAddress: order.shippingAddress
         ? {

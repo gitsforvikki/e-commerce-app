@@ -33,8 +33,6 @@ const cartSchema = new mongoose.Schema({
   ],
 });
 
-cartSchema.index({ userId: 1 }, { unique: true });
-
 export const Cart =
   (mongoose.models.Cart as Model<Cart> | undefined) ||
   mongoose.model<Cart>("Cart", cartSchema);
