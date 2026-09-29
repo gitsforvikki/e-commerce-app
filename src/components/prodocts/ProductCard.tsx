@@ -8,13 +8,14 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { addToCartAction } from "@/server-actions/cart.action";
 import { useCartStore } from "@/store/cartStore";
 import { formatInr } from "@/services/order/pricing.service";
+import { routes } from "@/utils/routes";
 
 export const ProductCard = ({ _id, image, name, price, category }: ProductType) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { addItem } = useCartStore();
 
-  const productUrl = `/${category ? category.toLowerCase() : "products"}/${_id}`;
+  const productUrl = routes.SPECIFIC_PRODUCT(category, _id);
 
   const handleAdd = () => {
     startTransition(async () => {

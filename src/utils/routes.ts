@@ -9,8 +9,14 @@ export const routes = {
   PRIVACY: "/privacy",
   TERMS: "/terms",
   COOKIE: "/cookie",
-  PROFILE:"/profile",
-  ORDER:"/orders",
-  CHECKOUT:"/checkout",
-  SPECIFIC_PRODUCT: (slug: string) => `product/${slug}`,
+  PROFILE: "/profile",
+  ORDER: "/orders",
+  CHECKOUT: "/checkout",
+  SPECIFIC_PRODUCT: (category: string, slug?: string) => {
+    if (slug) {
+      const formattedCategory = category ? category.toLowerCase().trim() : "products";
+      return `/${formattedCategory}/${slug}`;
+    }
+    return `/products/${category}`;
+  },
 };
