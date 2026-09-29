@@ -75,9 +75,9 @@ const footerColumns: FooterColumn[] = [
   {
     title: "Trust & Legal",
     links: [
-      { name: "Privacy Policy", link: "#privacy" },
-      { name: "Terms of Service", link: "#terms" },
-      { name: "Cookie Settings", link: "#cookie" },
+      { name: "Privacy Policy", link: routes.PRIVACY },
+      { name: "Terms of Service", link: routes.TERMS },
+      { name: "Cookie Settings", link: routes.COOKIE },
     ],
   },
 ];

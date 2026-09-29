@@ -303,13 +303,21 @@ export const RegisterForm = () => {
             />
             <span className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
               I agree to the{" "}
-              <a href="#" className="text-violet-600 dark:text-violet-400 font-semibold hover:underline">
+              <Link
+                href={routes.TERMS}
+                target="_blank"
+                className="text-violet-600 dark:text-violet-400 font-semibold hover:underline"
+              >
                 Terms of Service
-              </a>{" "}
+              </Link>{" "}
               and{" "}
-              <a href="#" className="text-violet-600 dark:text-violet-400 font-semibold hover:underline">
+              <Link
+                href={routes.PRIVACY}
+                target="_blank"
+                className="text-violet-600 dark:text-violet-400 font-semibold hover:underline"
+              >
                 Privacy Policy
-              </a>
+              </Link>
               .
             </span>
           </label>
