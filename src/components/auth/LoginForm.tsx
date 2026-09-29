@@ -8,6 +8,8 @@ import { login } from "@/server-actions/auth.actions";
 import { useAuth } from "@/context/auth-context";
 import { routes } from "@/utils/routes";
 
+import { useCartStore } from "@/store/cartStore";
+
 const initialState = { success: false, error: "" };
 
 export const LoginForm = () => {
@@ -16,14 +18,30 @@ export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [state, formAction, pending] = useActionState(login, initialState);
   const { refreshUser } = useAuth();
+  const setCart = useCartStore((s) => s.setCart);
 
   useEffect(() => {
     if (!state.success) return;
-    void refreshUser();
-    // Redirect to the originally requested page, or home as a fallback
-    const callbackUrl = searchParams.get("callbackUrl") || routes.HOME;
-    router.push(callbackUrl);
-  }, [refreshUser, router, searchParams, state.success]);
+
+    const syncAndRedirect = async () => {
+      await refreshUser();
+      try {
+        const res = await fetch("/api/cart", { cache: "no-store" });
+        const data = await res.json();
+        if (Array.isArray(data?.items)) {
+          setCart(data.items);
+        }
+      } catch (err) {
+        console.error("Error syncing cart after login:", err);
+      }
+      // Redirect to the originally requested page, or home as a fallback
+      const callbackUrl = searchParams.get("callbackUrl") || routes.HOME;
+      router.push(callbackUrl);
+      router.refresh();
+    };
+
+    void syncAndRedirect();
+  }, [refreshUser, router, searchParams, setCart, state.success]);
 
   return (
     <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl shadow-xl dark:shadow-2xl dark:shadow-violet-950/20 p-6 sm:p-10 transition-all relative z-10">

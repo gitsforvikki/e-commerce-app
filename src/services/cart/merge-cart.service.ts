@@ -1,36 +1,99 @@
 import { Types } from "mongoose";
-import { getGuestCart, clearGuestCart } from "./guest-cart.services";
+import { getGuestCart, saveToGuestCart } from "./guest-cart.services";
 import { getOrCreateCart } from "./user-cart.service";
 import { Product } from "@/models/Product";
+import { connectDB } from "@/lib/db";
 
-export async function mergeGuestCart(userId: string) {
+export async function mergeGuestCart(userId: string | Types.ObjectId) {
+  const userIdStr = userId.toString();
+  if (!Types.ObjectId.isValid(userIdStr)) return;
+
+  await connectDB();
+
   const guestItems = await getGuestCart();
-  if (!guestItems.length) return;
+  const dbCart = await getOrCreateCart(userIdStr);
 
-  const dbCart = await getOrCreateCart(userId);
-  const productIds = guestItems.map(
-    (item) => new Types.ObjectId(item.productId),
+  // If both carts are empty, nothing to merge
+  if (!guestItems.length && !dbCart.items.length) {
+    return;
+  }
+
+  // Map of guest cart items (productId -> qty)
+  const guestMap = new Map<string, number>();
+  for (const item of guestItems) {
+    guestMap.set(item.productId, item.qty);
+  }
+
+  // Map of DB cart items (productId -> qty)
+  const dbMap = new Map<string, number>();
+  for (const item of dbCart.items) {
+    dbMap.set(item.productId.toString(), item.qty);
+  }
+
+  // Union of all unique product IDs from both carts
+  const allProductIds = Array.from(
+    new Set([...guestMap.keys(), ...dbMap.keys()]),
   );
-  const products = await Product.find({ _id: { $in: productIds } }).select(
+
+  const validObjectIds = allProductIds
+    .filter((id) => Types.ObjectId.isValid(id))
+    .map((id) => new Types.ObjectId(id));
+
+  const products = await Product.find({ _id: { $in: validObjectIds } }).select(
     "_id qty",
   );
-
-  for (const item of guestItems) {
-    const product = products.find((p) => p._id.toString() === item.productId);
-    if (!product || product.qty < 1) continue;
-    const existing = dbCart.items.find(
-      (i) => i.productId.toString() === item.productId,
-    );
-
-    if (existing) {
-      existing.qty = Math.min(existing.qty + item.qty, product.qty, 99);
-    } else {
-      dbCart.items.push({
-        productId: new Types.ObjectId(item.productId),
-        qty: Math.min(item.qty, product.qty, 99),
-      });
-    }
+  const productStockMap = new Map<string, number>();
+  for (const product of products) {
+    productStockMap.set(product._id.toString(), product.qty);
   }
+
+  const mergedDbItems: { productId: Types.ObjectId; qty: number }[] = [];
+  const mergedGuestItems: { productId: string; qty: number }[] = [];
+
+  for (const productId of allProductIds) {
+    const stock = productStockMap.get(productId);
+    // Skip if product doesn't exist or is out of stock
+    if (stock === undefined || stock < 1) continue;
+
+    const guestQty = guestMap.get(productId);
+    const dbQty = dbMap.get(productId);
+
+    let targetQty: number;
+
+    if (guestQty !== undefined && dbQty !== undefined) {
+      // Condition 1: Same item in both guest cart and DB cart
+      // -> update with max(guest cart qty, db cart qty)
+      // -> if quantities are same, max returns that exact quantity
+      targetQty = Math.max(guestQty, dbQty);
+    } else if (guestQty !== undefined) {
+      // Condition 2a: Item exists only in guest cart -> combine
+      targetQty = guestQty;
+    } else if (dbQty !== undefined) {
+      // Condition 2b: Item exists only in DB cart -> combine
+      targetQty = dbQty;
+    } else {
+      continue;
+    }
+
+    // Clamp by available inventory and max 99
+    const finalQty = Math.min(targetQty, stock, 99);
+    if (finalQty < 1) continue;
+
+    mergedDbItems.push({
+      productId: new Types.ObjectId(productId),
+      qty: finalQty,
+    });
+
+    mergedGuestItems.push({
+      productId,
+      qty: finalQty,
+    });
+  }
+
+  // Update DB cart with combined items
+  dbCart.items = mergedDbItems as any;
   await dbCart.save();
-  await clearGuestCart();
+
+  // Update Guest cart (cookies) with the same combined items (cookie schema max 30)
+  await saveToGuestCart(mergedGuestItems.slice(0, 30));
 }
