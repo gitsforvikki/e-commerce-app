@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/ui/navbar/Navbar";
 import { AuthProvider } from "@/context/auth-context";
@@ -8,6 +8,7 @@ import { getCartItemsFromDB } from "@/services/cart/get-cart-fromdb.service";
 import { getCurrentUserData } from "@/services/user/user.service";
 import { CartItemUiType } from "@/type";
 import CartProvider from "@/utils/cart/cart-provider";
+import { PwaRegister } from "@/components/pwa/PwaRegister";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,14 +21,33 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#7C3AED",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   title: "ShopHub - Modern E-Commerce Experience",
   description:
     "Shop the best products across fashion, electronics, accessories and more with fast delivery and great deals.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "ShopHub",
+  },
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
     shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
@@ -64,6 +84,7 @@ export default async function RootLayout({
       >
         <ThemeProvider>
           <AuthProvider>
+            <PwaRegister />
             <CartProvider initialItems={items}>
               <Navbar />
               <div className="flex-1">{children}</div>
