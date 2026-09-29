@@ -59,15 +59,15 @@ const footerColumns: FooterColumn[] = [
     title: "Customer Care",
     links: [
       { name: "Track Your Order", link: routes.ORDER },
-      { name: "Shipping & Delivery", link: "#shipping" },
+      { name: "Contact Support", link: routes.CONTACT },
       { name: "View Shopping Cart", link: routes.CART },
-      { name: "Contact Support", link: "mailto:support@shophub.com" },
+      { name: "Direct Email", link: "mailto:support@shophub.com" },
     ],
   },
   {
     title: "Company",
     links: [
-      { name: "About ShopHub", link: routes.ABOUT || "#about" },
+      { name: "About ShopHub", link: routes.ABOUT },
       { name: "Affiliate Program", link: "#affiliates" },
       { name: "Store Locator", link: "#stores" },
     ],
