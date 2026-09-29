@@ -62,7 +62,9 @@ export const HeroPage = () => {
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Explore authentic premium apparel, designer accessories, and everyday essentials with instant search, verified deals, and fast shipping.
+              Explore authentic premium apparel, designer accessories, and
+              everyday essentials with instant search, verified deals, and fast
+              shipping.
             </p>
 
             {/* Working Search Bar */}
@@ -97,7 +99,9 @@ export const HeroPage = () => {
                   key={tag.label}
                   type="button"
                   onClick={() =>
-                    router.push(`/products?search=${encodeURIComponent(tag.query)}`)
+                    router.push(
+                      `/products?search=${encodeURIComponent(tag.query)}`,
+                    )
                   }
                   className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-slate-300 hover:text-white transition-colors"
                 >
@@ -126,16 +130,26 @@ export const HeroPage = () => {
             {/* Stats row */}
             <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/10 max-w-lg mx-auto lg:mx-0 text-center sm:text-left">
               <div>
-                <p className="text-2xl sm:text-3xl font-extrabold text-white">12+</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-white">
+                  12+
+                </p>
                 <p className="text-xs text-slate-400 mt-0.5">Curated Items</p>
               </div>
               <div>
-                <p className="text-2xl sm:text-3xl font-extrabold text-white">100%</p>
-                <p className="text-xs text-slate-400 mt-0.5">Authentic Brands</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-white">
+                  100%
+                </p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Authentic Brands
+                </p>
               </div>
               <div>
-                <p className="text-2xl sm:text-3xl font-extrabold text-white">₹0</p>
-                <p className="text-xs text-slate-400 mt-0.5">Free Delivery Over ₹499</p>
+                <p className="text-2xl sm:text-3xl font-extrabold text-white">
+                  ₹0
+                </p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Free Delivery Over ₹499
+                </p>
               </div>
             </div>
           </div>
@@ -202,7 +216,9 @@ export const HeroPage = () => {
               </div>
               <div>
                 <p className="text-xs font-bold text-white">Express Delivery</p>
-                <p className="text-[10px] text-slate-400">Dispatched in 24 hours</p>
+                <p className="text-[10px] text-slate-400">
+                  Dispatched in 24 hours
+                </p>
               </div>
             </div>
 
@@ -213,7 +229,9 @@ export const HeroPage = () => {
               </div>
               <div>
                 <p className="text-xs font-bold text-white">100% Genuine</p>
-                <p className="text-[10px] text-slate-400">Verified by ShopHub</p>
+                <p className="text-[10px] text-slate-400">
+                  Verified by ShopHub
+                </p>
               </div>
             </div>
           </div>
