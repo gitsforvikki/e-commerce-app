@@ -48,7 +48,7 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-7">
+          <div className="hidden md:flex items-center gap-5 lg:gap-7">
             <Link
               href={routes.HOME}
               className="text-sm font-semibold text-slate-700 hover:text-violet-600 dark:text-slate-200 dark:hover:text-violet-400 transition-colors"
@@ -59,7 +59,25 @@ export const Navbar = () => {
               href={routes.PRODUCTS}
               className="text-sm font-semibold text-slate-700 hover:text-violet-600 dark:text-slate-200 dark:hover:text-violet-400 transition-colors"
             >
-              Products
+              All Products
+            </Link>
+            <Link
+              href={routes.MENS}
+              className="text-sm font-semibold text-slate-700 hover:text-violet-600 dark:text-slate-200 dark:hover:text-violet-400 transition-colors"
+            >
+              Men
+            </Link>
+            <Link
+              href={routes.WOMENS}
+              className="text-sm font-semibold text-slate-700 hover:text-violet-600 dark:text-slate-200 dark:hover:text-violet-400 transition-colors"
+            >
+              Women
+            </Link>
+            <Link
+              href={routes.KIDS}
+              className="text-sm font-semibold text-slate-700 hover:text-violet-600 dark:text-slate-200 dark:hover:text-violet-400 transition-colors"
+            >
+              Kids
             </Link>
             <Link
               href={routes.ORDER}
@@ -176,7 +194,28 @@ export const Navbar = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className="block px-4 py-2.5 rounded-xl font-semibold text-slate-700 hover:text-violet-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:text-violet-400 dark:hover:bg-slate-900 transition-colors text-sm"
             >
-              Products
+              All Products
+            </Link>
+            <Link
+              href={routes.MENS}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-4 py-2.5 rounded-xl font-semibold text-slate-700 hover:text-violet-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:text-violet-400 dark:hover:bg-slate-900 transition-colors text-sm"
+            >
+              Men&apos;s Collection
+            </Link>
+            <Link
+              href={routes.WOMENS}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-4 py-2.5 rounded-xl font-semibold text-slate-700 hover:text-violet-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:text-violet-400 dark:hover:bg-slate-900 transition-colors text-sm"
+            >
+              Women&apos;s Collection
+            </Link>
+            <Link
+              href={routes.KIDS}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-4 py-2.5 rounded-xl font-semibold text-slate-700 hover:text-violet-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:text-violet-400 dark:hover:bg-slate-900 transition-colors text-sm"
+            >
+              Kids &amp; Youth
             </Link>
             <Link
               href={routes.ORDER}

@@ -41,15 +41,28 @@ export async function getProductById(
   }
 }
 
-//get products by category
+// ── Category Normalizer ──────────────────────────────────────────────
+export function normalizeCategory(slug: string): "MEN" | "WOMEN" | "KIDS" | null {
+  if (!slug) return null;
+  const clean = slug.toLowerCase().trim();
+  if (clean === "men" || clean === "mens") return "MEN";
+  if (clean === "women" || clean === "womens") return "WOMEN";
+  if (clean === "kids" || clean === "kid") return "KIDS";
+  return null;
+}
+
+// ── Get products by category ─────────────────────────────────────────
 export async function getProductsByCategory(
   category: string,
 ): Promise<ProductType[]> {
   try {
-    //connect to db
     await connectDB();
-    //fetch products from db
-    const products = await Product.find({ category });
+    const normalized = normalizeCategory(category);
+    const query = normalized
+      ? { category: normalized }
+      : { category: new RegExp(`^${category}$`, "i") };
+
+    const products = await Product.find(query);
     return products.map((product) => ({
       ...product.toObject(),
       _id: product._id.toString(),

@@ -29,12 +29,22 @@ import {
 
 interface ProductsPageClientProps {
   initialProducts: ProductType[];
+  defaultCategory?: string;
+  categoryTitle?: string;
+  categoryTagline?: string;
+  categoryBadge?: string;
+  isCategoryPage?: boolean;
 }
 
 const ITEMS_PER_PAGE = 12;
 
 export const ProductsPageClient = ({
   initialProducts,
+  defaultCategory,
+  categoryTitle,
+  categoryTagline,
+  categoryBadge,
+  isCategoryPage = false,
 }: ProductsPageClientProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -87,8 +97,11 @@ export const ProductsPageClient = ({
       };
     }, [initialProducts]);
 
-  // Initial state derived from URL query parameters
-  const initialCategoryParam = searchParams.get("category")?.toUpperCase() || "ALL";
+  // Initial state derived from URL query parameters or defaultCategory
+  const initialCategoryParam =
+    searchParams.get("category")?.toUpperCase() ||
+    defaultCategory?.toUpperCase() ||
+    "ALL";
   const initialSearchParam = searchParams.get("search") || "";
   const initialSortParam = (searchParams.get("sort") as SortOption) || "featured";
 
@@ -302,12 +315,21 @@ export const ProductsPageClient = ({
               Home
             </Link>
             <ChevronRight size={13} className="text-slate-400 dark:text-slate-600" />
-            <span className="font-semibold text-slate-800 dark:text-slate-200">Products</span>
+            <Link
+              href={routes.PRODUCTS}
+              className={
+                isCategoryPage
+                  ? "hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                  : "font-semibold text-slate-800 dark:text-slate-200"
+              }
+            >
+              Products
+            </Link>
             {filters.selectedCategory !== "ALL" && (
               <>
                 <ChevronRight size={13} className="text-slate-400 dark:text-slate-600" />
                 <span className="font-semibold text-violet-600 dark:text-violet-400 capitalize">
-                  {filters.selectedCategory.toLowerCase()}
+                  {categoryTitle || `${filters.selectedCategory.toLowerCase()} collection`}
                 </span>
               </>
             )}
@@ -318,16 +340,17 @@ export const ProductsPageClient = ({
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-xs font-bold mb-2">
                 <Sparkles size={13} />
-                <span>Curated Catalog</span>
+                <span>{categoryBadge || "Curated Catalog"}</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                {filters.selectedCategory === "ALL"
-                  ? "Explore All Products"
-                  : `${filters.selectedCategory} Collection`}
+                {categoryTitle ||
+                  (filters.selectedCategory === "ALL"
+                    ? "Explore All Products"
+                    : `${filters.selectedCategory} Collection`)}
               </h1>
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
-                Discover exceptional quality across top brands with flexible filters,
-                instant search, secure checkout, and free fast shipping.
+                {categoryTagline ||
+                  "Discover exceptional quality across top brands with flexible filters, instant search, secure checkout, and free fast shipping."}
               </p>
             </div>
 
