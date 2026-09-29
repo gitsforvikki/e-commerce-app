@@ -83,3 +83,61 @@ export async function uploadProduct(productData: Partial<ProductType>) {
     };
   }
 }
+
+// ── Update product ──────────────────────────────────────────────────
+
+export async function updateProduct(
+  productId: string,
+  productData: Partial<ProductType>,
+) {
+  try {
+    if (!Types.ObjectId.isValid(productId)) {
+      return { success: false, error: "Invalid product ID" };
+    }
+
+    // Defensive: ensure immutable fields like _id are not in update payload
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, createdAt, updatedAt, ...safeData } =
+      productData as Record<string, unknown>;
+
+    await connectDB();
+    const updated = await Product.findByIdAndUpdate(productId, safeData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updated) {
+      return { success: false, error: "Product not found" };
+    }
+
+    return {
+      success: true,
+      product: { ...updated.toObject(), _id: updated._id.toString() },
+    };
+  } catch (error: unknown) {
+    console.error("Error updating product:", error);
+    return { success: false, error: "Failed to update product" };
+  }
+}
+
+// ── Delete product ──────────────────────────────────────────────────
+
+export async function deleteProduct(productId: string) {
+  try {
+    if (!Types.ObjectId.isValid(productId)) {
+      return { success: false, error: "Invalid product ID" };
+    }
+
+    await connectDB();
+    const deleted = await Product.findByIdAndDelete(productId);
+
+    if (!deleted) {
+      return { success: false, error: "Product not found" };
+    }
+
+    return { success: true };
+  } catch (error: unknown) {
+    console.error("Error deleting product:", error);
+    return { success: false, error: "Failed to delete product" };
+  }
+}

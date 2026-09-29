@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import {
   isPrivateRoute,
+  isAdminRoute,
   isAuthRoute,
   DEFAULT_LOGIN_REDIRECT,
   LOGIN_ROUTE,
@@ -11,44 +12,60 @@ import {
  * Lightweight JWT-payload decoder for Edge Runtime.
  * Only checks structure + expiry — the full cryptographic verification
  * is handled server-side by `lib/auth.ts` (verifyToken) when the page
- * or API route actually loads.  This keeps the proxy fast and
+ * or API route actually loads. This keeps the proxy fast and
  * Edge-compatible without pulling in Node-only crypto libraries.
  */
-function isTokenValid(token: string): boolean {
+function decodeTokenPayload(
+  token: string,
+): { exp?: number; role?: string } | null {
   try {
     const parts = token.split(".");
-    if (parts.length !== 3) return false;
+    if (parts.length !== 3) return null;
 
     const payload = JSON.parse(
-      atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
-    ) as { exp?: number };
+      atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")),
+    ) as { exp?: number; role?: string };
 
     // Reject if the token has expired
-    if (payload.exp && payload.exp * 1000 < Date.now()) return false;
+    if (payload.exp && payload.exp * 1000 < Date.now()) return null;
 
-    return true;
+    return payload;
   } catch {
-    return false;
+    return null;
   }
 }
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("token")?.value;
-  const isAuthenticated = !!token && isTokenValid(token);
+  const tokenPayload = token ? decodeTokenPayload(token) : null;
+  const isAuthenticated = !!tokenPayload;
+  const isAdmin = tokenPayload?.role?.toString().toUpperCase() === "ADMIN";
 
   // ── 1. Auth pages (login / register): redirect authenticated users away ──
   if (isAuthRoute(pathname)) {
     if (isAuthenticated) {
       return NextResponse.redirect(
-        new URL(DEFAULT_LOGIN_REDIRECT, request.url)
+        new URL(DEFAULT_LOGIN_REDIRECT, request.url),
       );
     }
     // Guest on auth page → allow through
     return NextResponse.next();
   }
 
-  // ── 2. Private routes: guests get redirected to login with callback URL ──
+  // ── 2. Admin routes: require authentication (server components check live DB role) ──
+  if (isAdminRoute(pathname)) {
+    if (!isAuthenticated) {
+      const loginUrl = new URL(LOGIN_ROUTE, request.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    // Authenticated users proceed to the Server Component, which authoritatively
+    // verifies their real-time role from the database via getCurrentUserData().
+    return NextResponse.next();
+  }
+
+  // ── 3. Private routes: guests get redirected to login with callback URL ──
   if (isPrivateRoute(pathname)) {
     if (!isAuthenticated) {
       const loginUrl = new URL(LOGIN_ROUTE, request.url);
@@ -57,7 +74,7 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // ── 3. All other routes (public) or authenticated on private → allow ──
+  // ── 4. All other routes (public) or authenticated on private → allow ──
   return NextResponse.next();
 }
 

@@ -8,6 +8,7 @@ import { addToCartAction } from "@/server-actions/cart.action";
 import { useCartStore } from "@/store/cartStore";
 import { formatInr } from "@/services/order/pricing.service";
 import { routes } from "@/utils/routes";
+import { AdminProductActions } from "./AdminProductActions";
 import {
   Heart,
   ShoppingCart,
@@ -291,6 +292,12 @@ export default function ProductDetails({ product }: { product: ProductType }) {
                 </p>
               )}
             </div>
+
+            {/* Admin Controls (Only rendered if user is ADMIN) */}
+            <AdminProductActions
+              productId={product._id}
+              productName={product.name}
+            />
 
             {/* Trust Badges */}
             <div className="grid grid-cols-2 gap-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 p-4 shadow-xs transition-colors">

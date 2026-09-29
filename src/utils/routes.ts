@@ -12,6 +12,8 @@ export const routes = {
   PROFILE: "/profile",
   ORDER: "/orders",
   CHECKOUT: "/checkout",
+  PRODUCT_UPLOAD: "/product-upload",
+  EDIT_PRODUCT: (productId: string) => `/product-edit/${productId}`,
   SPECIFIC_PRODUCT: (category: string, slug?: string) => {
     if (slug) {
       const formattedCategory = category ? category.toLowerCase().trim() : "products";

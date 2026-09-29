@@ -17,6 +17,7 @@ export const PRIVATE_ROUTES: string[] = [
   "/checkout",
   "/payment",
   "/product-upload",
+  "/product-edit",
 ];
 
 /**
@@ -28,6 +29,7 @@ export const PRIVATE_ROUTE_PREFIXES: string[] = [
   "/checkout/",
   "/payment/",
   "/product-upload/",
+  "/product-edit/",
 ];
 
 /**
@@ -49,11 +51,34 @@ export const DEFAULT_LOGIN_REDIRECT = "/";
 export const LOGIN_ROUTE = "/login";
 
 /**
+ * Admin-only routes — regular users and guests should never access these.
+ */
+export const ADMIN_ROUTES: string[] = [
+  "/product-upload",
+  "/product-edit",
+];
+
+export const ADMIN_ROUTE_PREFIXES: string[] = [
+  "/product-upload/",
+  "/product-edit/",
+];
+
+/**
  * Determine whether a given pathname requires authentication.
  */
 export function isPrivateRoute(pathname: string): boolean {
   if (PRIVATE_ROUTES.includes(pathname)) return true;
   if (PRIVATE_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix)))
+    return true;
+  return false;
+}
+
+/**
+ * Determine whether a given pathname is restricted to ADMIN users only.
+ */
+export function isAdminRoute(pathname: string): boolean {
+  if (ADMIN_ROUTES.includes(pathname)) return true;
+  if (ADMIN_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix)))
     return true;
   return false;
 }

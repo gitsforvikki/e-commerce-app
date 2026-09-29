@@ -1,20 +1,20 @@
 import JWT from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-const secret = process.env.JWT_SECRET;
-
-export const signToken = (payload: object) => {
+function getSecret(): string {
+  const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw new Error("❌ Please define JWT_SECRET in .env.local");
   }
-  return JWT.sign(payload, secret, { expiresIn: "1d" });
+  return secret;
+}
+
+export const signToken = (payload: object) => {
+  return JWT.sign(payload, getSecret(), { expiresIn: "1d" });
 };
 
 export const verifyToken = (token: string) => {
-  if (!secret) {
-    throw new Error("❌ Please define JWT_SECRET in .env.local");
-  }
-  const decode = JWT.verify(token, secret);
+  const decode = JWT.verify(token, getSecret());
   return decode as { userId: string; role: string; name: string };
 };
 
