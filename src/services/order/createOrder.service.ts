@@ -5,17 +5,16 @@ import { Product } from "@/models/Product";
 import { calculateOrderPricing } from "@/services/order/pricing.service";
 import { refundProviderPayment } from "@/services/order/payment-provider.service";
 import { CashfreePaymentService } from "@/services/payment/cashfree/cashfree.payment.service";
+import {
+  validateStock,
+  decrementStock,
+  InsufficientStockError,
+} from "@/services/inventory/inventory.service";
 import type { ShippingAddressType } from "@/validators/shippingAddressValidator";
 import mongoose, { Types } from "mongoose";
 
-export class InsufficientInventoryError extends Error {
-  constructor(productName: string) {
-    super(
-      `Insufficient stock for ${productName}; the captured payment will be refunded`,
-    );
-    this.name = "InsufficientInventoryError";
-  }
-}
+// Re-export for backward compatibility with existing imports
+export { InsufficientStockError as InsufficientInventoryError };
 
 export async function createOrderService({
   userId,
@@ -43,6 +42,7 @@ export async function createOrderService({
     if (activeSession) productsQuery.session(activeSession);
     const products = await productsQuery;
 
+    // Build order items from cart
     const orderItems = cart.items.map((cartItem) => {
       const product = products.find(
         (candidate) =>
@@ -50,13 +50,6 @@ export async function createOrderService({
       );
       if (!product)
         throw new Error("A product in your cart is no longer available");
-      if (
-        !Number.isInteger(cartItem.qty) ||
-        cartItem.qty < 1 ||
-        cartItem.qty > product.qty
-      ) {
-        throw new Error(`${product.name} does not have enough stock`);
-      }
       return {
         productId: product._id,
         name: product.name,
@@ -65,6 +58,9 @@ export async function createOrderService({
         qty: cartItem.qty,
       };
     });
+
+    // Validate stock BEFORE creating the order
+    validateStock(orderItems, products);
     const pricing = calculateOrderPricing(
       orderItems.map((item) => ({
         price: item.pricePaise / 100,
@@ -203,35 +199,16 @@ export async function settleCapturedOrder({
         }
       }
 
-      const decrementedItems: { productId: Types.ObjectId; qty: number }[] = [];
-      try {
-        for (const item of order.items) {
-          const updateQuery = Product.updateOne(
-            { _id: item.productId, qty: { $gte: item.qty } },
-            { $inc: { qty: -item.qty } },
-          );
-          if (activeSession) updateQuery.session(activeSession);
-          const result = await updateQuery;
-          if (result.modifiedCount !== 1) {
-            throw new InsufficientInventoryError(item.name);
-          }
-          if (!activeSession) {
-            decrementedItems.push({ productId: item.productId, qty: item.qty });
-          }
-        }
-      } catch (inventoryError) {
-        if (!activeSession && decrementedItems.length > 0) {
-          await Promise.all(
-            decrementedItems.map((d) =>
-              Product.updateOne(
-                { _id: d.productId },
-                { $inc: { qty: d.qty } },
-              ),
-            ),
-          );
-        }
-        throw inventoryError;
-      }
+      // Decrement stock via inventory service
+      // (handles atomic checks + auto-rollback on failure)
+      await decrementStock(
+        order.items.map((item) => ({
+          productId: item.productId,
+          name: item.name,
+          qty: item.qty,
+        })),
+        activeSession,
+      );
 
       order.payment.status = "SUCCESS";
       order.payment.paymentId = paymentId;
@@ -379,7 +356,7 @@ export async function settleOrRefundCapturedOrder(input: {
   try {
     return { ...(await settleCapturedOrder(input)), refunded: false };
   } catch (error) {
-    if (!(error instanceof InsufficientInventoryError)) throw error;
+    if (!(error instanceof InsufficientStockError)) throw error;
     const refund = await refundCapturedOrder({
       orderId: input.orderId,
       paymentId: input.paymentId,
