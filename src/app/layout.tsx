@@ -22,7 +22,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ShopHub - Modern E-Commerce Experience",
-  description: "Shop the best products across fashion, electronics, accessories and more with fast delivery and great deals.",
+  description:
+    "Shop the best products across fashion, electronics, accessories and more with fast delivery and great deals.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default async function RootLayout({
