@@ -199,3 +199,88 @@ ShopHub follows a modular full-stack architecture where UI, business logic, data
                          │     Cloudinary      │
                          │   Product Images    │
                          └─────────────────────┘
+
+
+
+```
+# 🏗️ System Architecture
+
+ShopHub separates **order processing, payment settlement, authentication, authorization, and database operations** into clear server-side responsibilities.
+
+---
+
+## 🔄 Order, Payment & Database Flow
+
+The checkout process follows a server-authoritative workflow to keep pricing, inventory, and payment state controlled by the backend.
+
+```text
+Customer
+   │
+   ▼
+Add Products to Cart
+   │
+   ▼
+Checkout
+   │
+   ▼
+Server Validation
+   ├── User Authentication
+   ├── Product Validation
+   ├── Price Validation
+   ├── Quantity Validation
+   └── Inventory Validation
+   │
+   ▼
+Create Order
+   │
+   ▼
+Create Payment
+   │
+   ▼
+Payment Provider
+   │
+   ▼
+Webhook / Server Verification
+   │
+   ▼
+Verify Payment
+   │
+   ▼
+Update Payment Status
+   │
+   ▼
+Update Inventory
+   │
+   ▼
+Persist Final Order State
+   │
+   ▼
+Order Completed
+```
+
+## 🔐 Security Architecture
+
+Security-sensitive operations are handled on the server to prevent clients from manipulating authentication, authorization, pricing, inventory, or payment state.
+
+### Authentication
+
+- Passwords are securely hashed before storage.
+- Authentication state is maintained using **HTTP-only cookies**.
+- JWT secrets remain server-side.
+- Sensitive API credentials are never exposed to the client.
+- Protected operations require an authenticated user.
+
+### Authorization
+
+ShopHub uses **Role-Based Access Control (RBAC)**.
+
+Newly registered users receive:
+
+```text
+role = USER
+```
+Administrative operations such as product creation and product-image uploads require:
+```text
+role = ADMIN
+```
+Administrator privileges are provisioned through a trusted database or administrative process rather than a public registration form.
