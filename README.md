@@ -284,3 +284,121 @@ Administrative operations such as product creation and product-image uploads req
 role = ADMIN
 ```
 Administrator privileges are provisioned through a trusted database or administrative process rather than a public registration form.
+
+
+
+# 🛠️ Getting Started
+
+## Prerequisites
+Make sure you have installed:
+* **Node.js 18+**
+* **npm / pnpm / yarn**
+* **MongoDB** or **MongoDB Atlas**
+* **Cloudinary account**
+* **Payment provider account** for payment functionality
+
+---
+
+## 1. Clone the Repository
+```bash
+git clone <your-repository-url>
+cd e-commerce-app
+```
+
+---
+
+## 2. Install Dependencies
+
+**Using npm:**
+```bash
+npm install
+```
+
+**Or pnpm:**
+```bash
+pnpm install
+```
+
+**Or yarn:**
+```bash
+yarn install
+```
+
+---
+
+## 🔑 Environment Variables
+
+Create a `.env.local` file in the project root.
+
+```env
+# Database
+MONGODB_URI=
+
+# Authentication
+JWT_SECRET=
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# Razorpay
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
+
+# Cashfree
+CASHFREE_APP_ID=
+CASHFREE_SECRET_KEY=
+CASHFREE_API_VERSION=
+```
+
+> ⚠️ **Important:** Never commit `.env.local` or production secrets to Git.
+
+---
+
+## ▶️ Run the Development Server
+
+```bash
+npm run dev
+```
+
+Open: [http://localhost:3000](http://localhost:3000)
+
+The application will automatically reload when source files are modified.
+
+---
+
+## 🧪 Build for Production
+
+Create a production build:
+```bash
+npm run build
+```
+
+Run the production server:
+```bash
+npm start
+```
+
+---
+
+## 🧹 Code Quality
+
+Run the project's linting checks:
+```bash
+npm run lint
+```
+
+*Note: It is recommended to run linting and a production build before deploying changes.*
+
+## 👨‍💻 Author
+
+**Vikash Kumar**  
+*Full-Stack Developer*
+
+Focused on building modern web applications using:
+
+* **Frontend:** React, Next.js, TypeScript
+* **Backend & Database:** Node.js, Express.js, MongoDB, PostgreSQL
+* **DevOps & Deployment:** Docker, Kubernetes, CI/CD
