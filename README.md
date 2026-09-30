@@ -1,52 +1,201 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛍️ ShopHub — Full-Stack E-Commerce & PWA Platform
 
-## Getting Started
+ShopHub is a modern, full-stack e-commerce platform built with **Next.js 16, React 19, TypeScript, MongoDB, and Tailwind CSS**.
 
-First, run the development server:
+The project is designed with a production-oriented architecture, focusing on **server-side rendering, Server Actions, secure authentication, role-based authorization, inventory management, payment processing, image uploads, and a responsive PWA-ready experience**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+> **Portfolio Project:** ShopHub demonstrates full-stack development, modern Next.js architecture, secure backend design, database modeling, payment integration, and deployment workflows.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Live Demo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🌐 **Live Website:**  
+[https://shophub-online.vercel.app](https://shophub-online.vercel.app)
 
-## Commerce configuration
+> The live deployment may use test/sandbox payment credentials depending on the current environment.
 
-Set these environment variables in `.env.local` and in the deployment environment:
+---
 
-- `MONGODB_URI` — MongoDB connection string. Transactions used by payment settlement require a replica set (including MongoDB Atlas).
-- `JWT_SECRET` — long, random secret used to sign the HTTP-only session cookie.
-- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — private Cloudinary upload credentials.
-- `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` — Razorpay API credentials. The key ID is sent to the browser; the secret must remain server-only.
-- `RAZORPAY_WEBHOOK_SECRET` — webhook signing secret configured in Razorpay.
+## ✨ Features
 
-Configure a Razorpay webhook to send `payment.captured` events to `/api/payments/razorpay-webhook`. The endpoint verifies Razorpay's raw-body signature before updating the order. Do not mark orders paid from browser callbacks alone.
+### 🛒 E-Commerce
 
-Product creation and product-image uploads require a user whose database `role` is `ADMIN`. New registrations default to `USER`; provision the first administrator through a trusted database/admin process, never from a public registration form.
+- Product listing and product details
+- Product search and filtering
+- Shopping cart
+- Guest cart support
+- Persistent cart for authenticated users
+- Automatic guest-cart merge after login
+- Quantity management
+- Product inventory tracking
+- Order creation and management
+- Order history
+- Order status tracking
+- Payment status tracking
 
-Product inventory is stored in `Product.qty`; product prices are entered in rupees and order monetary snapshots are stored as integer paise with `currency: "INR"`. Before deploying these schema changes to a database with existing orders, migrate old order totals/items and resolve duplicate carts per user before enabling the unique cart index.
+### 🔐 Authentication & Authorization
 
-## Learn More
+- Secure user authentication
+- HTTP-only JWT session cookie
+- Password hashing with bcrypt
+- Protected routes
+- Role-based authorization
+- `USER` and `ADMIN` roles
+- Admin-only product management
+- Server-side authorization checks
+- Secure session handling
 
-To learn more about Next.js, take a look at the following resources:
+### 💳 Payment Integration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ShopHub supports modern payment providers with a modular payment architecture.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Current integrations include:
 
-## Deploy on Vercel
+- Cashfree
+- Razorpay
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Payment provider logic is separated from the core order system, making it easier to add or replace payment providers.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Payment settlement is handled through **server-side verification and webhooks** rather than trusting browser callbacks alone.
+
+### 📦 Inventory Management
+
+- Product stock tracking
+- Server-authoritative inventory validation
+- Stock validation during order creation
+- Concurrency-aware inventory updates
+- Order and inventory lifecycle handling
+
+### ☁️ Image Management
+
+Product images are managed using **Cloudinary**.
+
+- Secure server-side upload handling
+- Admin-only image upload
+- Cloudinary integration
+- Optimized image delivery
+
+### 📱 Responsive & PWA-Ready
+
+- Mobile-first responsive UI
+- Desktop and mobile layouts
+- PWA-oriented architecture
+- Optimized page loading
+- Modern responsive user experience
+
+### ⚡ Modern Next.js Architecture
+
+The application uses modern **Next.js App Router** patterns including:
+
+- React Server Components
+- Client Components where required
+- Server Actions
+- Route Handlers
+- Async server APIs
+- Server-side data fetching
+- Server-side mutations
+- Secure server-only environment variables
+- Metadata optimization
+
+---
+
+# 🧰 Tech Stack
+
+## Frontend
+
+- **Next.js 16**
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS**
+- **Zustand**
+- Responsive UI
+- PWA architecture
+
+## Backend
+
+- **Next.js Server Components**
+- **Next.js Server Actions**
+- **Route Handlers**
+- Node.js runtime
+- Server-side business logic
+
+## Database
+
+- **MongoDB**
+- **Mongoose**
+- MongoDB transactions
+- Indexed queries
+- Inventory management
+- Order and cart modeling
+
+## Authentication
+
+- JWT
+- HTTP-only cookies
+- bcrypt
+- Role-based access control
+
+## Payments
+
+- Cashfree
+- Razorpay
+- Webhook-based payment confirmation
+
+## Media
+
+- Cloudinary
+
+## Deployment
+
+- **Vercel**
+- MongoDB Atlas
+- Cloudinary
+
+---
+
+# 🏗️ Architecture
+
+ShopHub follows a modular full-stack architecture where UI, business logic, database operations, authentication, and external services are kept separated.
+
+```text
+                         ┌─────────────────────┐
+                         │      Browser        │
+                         │                     │
+                         │  React 19 / Next.js │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │   Next.js App       │
+                         │                     │
+                         │ Server Components   │
+                         │ Server Actions      │
+                         │ Route Handlers      │
+                         └──────────┬──────────┘
+                                    │
+                ┌───────────────────┼───────────────────┐
+                │                   │                   │
+                ▼                   ▼                   ▼
+       ┌────────────────┐  ┌────────────────┐  ┌────────────────┐
+       │ Authentication │  │ Business Logic │  │ Payment Layer  │
+       │                │  │                │  │                │
+       │ JWT / Cookies  │  │ Orders         │  │ Cashfree       │
+       │ RBAC           │  │ Cart           │  │ Razorpay       │
+       └────────────────┘  │ Inventory      │  │ Webhooks       │
+                           └───────┬────────┘  └────────────────┘
+                                   │
+                                   ▼
+                         ┌─────────────────────┐
+                         │      MongoDB        │
+                         │                     │
+                         │ Users               │
+                         │ Products            │
+                         │ Carts               │
+                         │ Orders              │
+                         └─────────────────────┘
+
+                         ┌─────────────────────┐
+                         │     Cloudinary      │
+                         │   Product Images    │
+                         └─────────────────────┘
